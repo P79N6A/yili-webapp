@@ -4,8 +4,16 @@ import Home from '@/pages/home/Home'
 import Member from '@/pages/member/Member'
 import Entry from '@/pages/entry/Entry'
 import Upload from '@/pages/upload/Upload'
-import ConTainer from '@/pages/container/ConTainer'
-import Race from '@/pages/race/Race'
+import ConTainer from '@/pages/usermsg/ConTainer'
+import Race from '@/pages/usermsg/Race'
+import Political from '@/pages/usermsg/political'
+import Blood from '@/pages/usermsg/blood'
+import Religion from '@/pages/usermsg/religion'
+import Marriage from '@/pages/usermsg/Marriage'
+import Account from '@/pages/usermsg/account'
+import Wage from '@/pages/usermsg/wage'
+import Jobdata from '@/pages/member/components/memberchildren/memberdetails/jobdata'
+
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +47,41 @@ export default new Router({
       path: '/race',
       name: 'Race',
       component: Race,
+      meta: { keepAlive: true }
+    }, {
+      path: '/political',
+      name: 'Political',
+      component: Political,
+      meta: { keepAlive: true }
+    }, {
+      path: '/blood',
+      name: 'Blood',
+      component: Blood,
+      meta: { keepAlive: true }
+    }, {
+      path: '/religion',
+      name: 'Religion',
+      component: Religion,
+      meta: { keepAlive: true }
+    }, {
+      path: '/marriage',
+      name: 'Marriage',
+      component: Marriage,
+      meta: { keepAlive: true }
+    }, {
+      path: '/account',
+      name: 'Account',
+      component: Account,
+      meta: { keepAlive: true }
+    }, {
+      path: '/wage',
+      name: 'Wage',
+      component: Wage,
+      meta: { keepAlive: true }
+    }, {
+      path: '/jobdata',
+      name: 'Jobdata',
+      component: Jobdata,
       meta: { keepAlive: true }
     }
   ]

@@ -5,7 +5,13 @@ Vue.use(Vuex)
 let state = {
   count: 0,
   ContainerName: '中国',
-  User_Race: '汉'
+  User_Race: '汉',
+  User_Political: '群众',
+  User_Blood: 'A型',
+  User_Religion: '无宗教信仰',
+  User_Marriage: '未婚',
+  User_Account: '农业',
+  User_Wage: '当月发当月'
 }
 
 const mutations = {
@@ -20,6 +26,24 @@ const mutations = {
   },
   Get_UserRaceState (context, race) {
     context.User_Race = race
+  },
+  Get_UserPoliticalState (context, item) {
+    context.User_Political = item
+  },
+  Get_UserBlood (context, item) {
+    context.User_Blood = item
+  },
+  Get_UserReligion (context, item) {
+    context.User_Religion = item
+  },
+  Get_UserMarriage (context, item) {
+    context.User_Marriage = item
+  },
+  Get_UserAccount (context, item) {
+    context.User_Account = item
+  },
+  Get_UserWage (context, item) {
+    context.User_Wage = item
   }
 }
 

@@ -2,15 +2,9 @@
  <div>
     <ul class="Basic-ul">
         <li class="Basic-li">
-            <div class="Basicmsg-left">姓氏</div>
+            <div class="Basicmsg-left">姓名</div>
             <div class="Basicmsg-container">
-                <input type="text" value="张" />
-            </div>
-        </li>
-        <li class="Basic-li">
-            <div class="Basicmsg-left">名字</div>
-            <div class="Basicmsg-container">
-              <input type="text" value="三" />
+                <input type="text" value="张三" />
             </div>
         </li>
         <li class="Basic-li">
@@ -36,7 +30,7 @@
         <li class="Basic-li">
             <div class="Basicmsgicon-left">性别</div>
             <div class="Basicmsgicon-container">{{SexValue}}</div>
-            <div class="Basicmsgicon-right" @click="Hand_sex">
+            <div class="Basicmsgicon-right" @click="user_GetSexVal">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
@@ -49,8 +43,8 @@
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">籍贯</div>
-            <div class="Basicmsg-container">
-                <input type="text" value="北京东城区" />
+            <div class="Basicmsg-container" @click="showPicker4">{{user.HomeTownPlace}}
+              <span class="iconfont Basiciconfont-time">&#xe64c;</span>
             </div>
         </li>
         <li class="Basic-li">
@@ -67,41 +61,29 @@
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">部门</div>
-            <div class="Basicmsg-container">
-                <input type="text" value=""/>
-            </div>
-        </li>
-        <li class="Basic-li">
-            <div class="Basicmsg-left">职位</div>
-            <div class="Basicmsg-container">
-                <input type="text" value=""/>
-            </div>
-        </li>
-        <li class="Basic-li">
             <div class="Basicmsgicon-left">政治面貌</div>
-            <div class="Basicmsgicon-container">中国共产党党员</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Political}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserPolitical">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">身高(CM)</div>
             <div class="Basicmsg-container">
-                <input type="text" value="165"/>
+                <input type="number" value="165" oninput="if(value.length>5)value=value.slice(0,5)" />
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">血型</div>
-            <div class="Basicmsgicon-container">A型</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Blood}}</div>
+            <div class="Basicmsgicon-right" @click="User_BloodType">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">宗教信仰</div>
-            <div class="Basicmsgicon-container">无宗教信仰</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Religion}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserReligion">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
@@ -119,73 +101,78 @@
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">婚姻状况</div>
-            <div class="Basicmsgicon-container">未婚</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Marriage}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserMarriage">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">户口性质</div>
-            <div class="Basicmsgicon-container">农业</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Account}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserAccount">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsgicon-left">原参保地</div>
-            <div class="Basicmsgicon-container">农业</div>
-            <div class="Basicmsgicon-right">
-                <span class="iconfont BasicIconbg" >&#xe603;</span>
+            <div class="Basicmsg-left">原参保地</div>
+            <div class="Basicmsg-container">
+                <input type="text" value="" placeholder="请在此处参保地址"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">单位发薪周期</div>
-            <div class="Basicmsgicon-container">一月</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{User_Wage}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserWage">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">是否独生子女</div>
-            <div class="Basicmsgicon-container">是</div>
-            <div class="Basicmsgicon-right">
+            <div class="Basicmsgicon-container">{{user.Only_Child}}</div>
+            <div class="Basicmsgicon-right" @click="Get_UserChild">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">出生地点</div>
-            <div class="Basicmsg-container">
-                <input type="text" value="上海市普陀区中江路338弄1号"/>
+            <div class="Basicmsg-container" @click="showBornPicker5">{{user.Birthplace}}
+              <span class="iconfont Basiciconfont-time">&#xe64c;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">户籍住址</div>
+            <div class="Basicmsg-container" @click="showAccountPicker6">{{user.Accountplace}}
+              <span class="iconfont Basiciconfont-time">&#xe64c;</span>
+            </div>
+        </li>
+        <li class="Basic-li">
+            <div class="Basicmsg-left">户籍详细地址</div>
             <div class="Basicmsg-container">
-                <input type="text" value="上海市普陀区中江路338弄1号"/>
+                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">家庭住址</div>
+            <div class="Basicmsg-container" @click="showFamilyPicker7">{{user.FamilyPlace}}
+              <span class="iconfont Basiciconfont-time">&#xe64c;</span>
+            </div>
+        </li>
+        <li class="Basic-li">
+            <div class="Basicmsg-left">家庭详细地址</div>
             <div class="Basicmsg-container">
-                <input type="text" value="上海市普陀区中江路338弄1号"/>
+                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">现在住址</div>
-            <div class="Basicmsg-container">
-                <input type="text" value="上海市普陀区中江路338弄1号"/>
+            <div class="Basicmsg-container" @click="showNowPicker8">{{user.NowPlace}}
+              <span class="iconfont Basiciconfont-time">&#xe64c;</span>
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">手机号码</div>
+            <div class="Basicmsg-left">现在详细地址</div>
             <div class="Basicmsg-container">
-                <input type="text" value="13813111311"/>
-            </div>
-        </li>
-        <li class="Basic-li">
-            <div class="Basicmsg-left">Email</div>
-            <div class="Basicmsg-container">
-                <input type="text" value="zhangshanshan@xincheng.com"/>
+                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
             </div>
         </li>
         <li class="Basic-li">
@@ -203,18 +190,76 @@
     </div>
     <div class="Basic_selectsex">
       <mt-radio
+       v-show="user.Only_ChildJudge"
+       :options="User_ChildOptions"
+       v-model="user.Only_Child"
+       @change="Get_UserChild"
+      >
+     </mt-radio>
+    </div>
+    <div class="Basic_selectsex">
+      <mt-radio
        v-show="user_IdTypeshow"
        :options="user_IdTypeList"
        v-model="user_IdTypeValue"
       >
      </mt-radio>
     </div>
+    <awesome-picker
+      ref="picker4"
+      :textTitle="picker4.textTitle"
+      :data="picker4.data"
+      :anchor="picker4.anchor"
+      :colorConfirm="picker4.areaconbg"
+      :colorCancel="picker4.areaconbg"
+      @confirm="handlePicker4Confirm">
+    </awesome-picker>
+    <awesome-picker
+      ref="picker5"
+      :textTitle="picker5.textTitle"
+      :data="picker5.data"
+      :anchor="picker5.anchor"
+      :colorConfirm="picker5.areaconbg"
+      :colorCancel="picker5.areaconbg"
+      @confirm="handlePicker5Confirm">
+    </awesome-picker>
+    <awesome-picker
+      ref="picker6"
+      :textTitle="picker6.textTitle"
+      :data="picker6.data"
+      :anchor="picker6.anchor"
+      :colorConfirm="picker6.areaconbg"
+      :colorCancel="picker6.areaconbg"
+      @confirm="handlePicker6Confirm">
+    </awesome-picker>
+    <awesome-picker
+      ref="picker7"
+      :textTitle="picker7.textTitle"
+      :data="picker7.data"
+      :anchor="picker7.anchor"
+      :colorConfirm="picker7.areaconbg"
+      :colorCancel="picker7.areaconbg"
+      @confirm="handlePicker7Confirm">
+    </awesome-picker>
+    <awesome-picker
+      ref="picker8"
+      :textTitle="picker8.textTitle"
+      :data="picker8.data"
+      :anchor="picker8.anchor"
+      :colorConfirm="picker8.areaconbg"
+      :colorCancel="picker8.areaconbg"
+      @confirm="handlePicker8Confirm">
+    </awesome-picker>
    <div class="overlayer" @touchmove.prevent v-show="Basic_opcatiybg">
    </div>
  </div>
 </template>
 <script>
+import Vue from 'vue'
+import areaData from '@/assets/js/area'
+import AwesomePicker from 'vue-awesome-picker'
 import { mapState } from 'vuex'
+Vue.use(AwesomePicker)
 export default {
   name: 'MemberBasic',
   data () {
@@ -222,31 +267,81 @@ export default {
       user: {
         ID: '11010119800101103X',
         BornTime: '1970-01-01',
-        testID: null
+        testID: null,
+        HomeTownPlace: '北京市 北京市 东城区',
+        Birthplace: '北京市 北京市 东城区',
+        Accountplace: '北京市 北京市 东城区',
+        FamilyPlace: '北京市 北京市 东城区',
+        NowPlace: '北京市 北京市 东城区',
+        Only_Child: '否',
+        Only_ChildJudge: false,
+        HomeTownDecide: false,
+        BirthPlaceDecide: false,
+        FamilyPlaceDecide: false,
+        NowPlaceDecide: false,
+        AccountPlaceDecide: false
       },
+      PlaceDecide: [
+        {'HomeTownDecide': '', 'value': false},
+        {'BirthPlaceDecide': '', 'value': false},
+        {'FamilyPlaceDecide': '', 'value': false},
+        {'NowPlaceDecide': '', 'value': false},
+        {'AccountPlaceDecide': '', 'value': false}
+      ],
       user_IdTypeValue: '身份证',
       SexValue: '女',
       msg: '../static/images/u236.png',
       Sexoptions: ['男', '女'],
+      User_ChildOptions: ['是', '否'],
       radio_sex: false,
       Basic_opcatiybg: false,
       jobsTime: '2018-01-01',
       country_value: '中国',
       user_IdTypeList: ['身份证', '台胞证', '港澳通行证'],
-      user_IdTypeshow: false
+      user_IdTypeshow: false,
+      picker4: {
+        anchor: [],
+        textTitle: '',
+        areaconbg: '#000',
+        data: areaData
+      },
+      picker5: {
+        anchor: [],
+        textTitle: '',
+        areaconbg: '#000',
+        data: areaData
+      },
+      picker6: {
+        anchor: [],
+        textTitle: '',
+        areaconbg: '#000',
+        data: areaData
+      },
+      picker7: {
+        anchor: [],
+        textTitle: '',
+        areaconbg: '#000',
+        data: areaData
+      },
+      picker8: {
+        anchor: [],
+        textTitle: '',
+        areaconbg: '#000',
+        data: areaData
+      }
     }
   },
   methods: {
-    Hand_sex () {
-      this.radio_sex = !this.radio_sex
-      this.Basic_opcatiybg = !this.Basic_opcatiybg
-    },
     user_GetSexVal () {
       this.radio_sex = !this.radio_sex
       this.Basic_opcatiybg = !this.Basic_opcatiybg
     },
     Get_IDtype () {
       this.user_IdTypeshow = !this.user_IdTypeshow
+      this.Basic_opcatiybg = !this.Basic_opcatiybg
+    },
+    Get_UserChild () {
+      this.user.Only_ChildJudge = !this.user.Only_ChildJudge
       this.Basic_opcatiybg = !this.Basic_opcatiybg
     },
     Get_userCountry () {
@@ -443,6 +538,81 @@ export default {
           this.jobsTime = e
         }
       })
+    },
+    showPicker4 () {
+      this.$refs.picker4.show()
+    },
+    handlePicker4Confirm (v) {
+      this.picker4.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+      let objarea = JSON.parse(this.value)
+      this.user.HomeTownPlace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    showBornPicker5 () {
+      this.$refs.picker5.show()
+    },
+    handlePicker5Confirm (v) {
+      this.picker5.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+      let objarea = JSON.parse(this.value)
+      this.user.Birthplace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    showAccountPicker6 () {
+      this.$refs.picker6.show()
+    },
+    handlePicker6Confirm (v) {
+      this.picker6.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+      let objarea = JSON.parse(this.value)
+      this.user.Accountplace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    showFamilyPicker7 () {
+      this.$refs.picker7.show()
+    },
+    handlePicker7Confirm (v) {
+      this.picker7.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+      let objarea = JSON.parse(this.value)
+      this.user.FamilyPlace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    showNowPicker8 () {
+      this.$refs.picker8.show()
+    },
+    handlePicker8Confirm (v) {
+      this.picker8.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+      let objarea = JSON.parse(this.value)
+      this.user.NowPlace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    Get_UserPolitical () {
+      this.$router.push({
+        path: `/political`
+      })
+    },
+    User_BloodType () {
+      this.$router.push({
+        path: `/blood`
+      })
+    },
+    Get_UserReligion () {
+      this.$router.push({
+        path: `/religion`
+      })
+    },
+    Get_UserMarriage () {
+      this.$router.push({
+        path: `/marriage`
+      })
+    },
+    Get_UserAccount () {
+      this.$router.push({
+        path: `/account`
+      })
+    },
+    Get_UserWage () {
+      this.$router.push({
+        path: `/wage`
+      })
     }
   },
   watch: {
@@ -453,7 +623,13 @@ export default {
   },
   computed: mapState({
     ContainerName: state => state.ContainerName,
-    User_Race: state => state.User_Race
+    User_Race: state => state.User_Race,
+    User_Political: state => state.User_Political,
+    User_Blood: state => state.User_Blood,
+    User_Religion: state => state.User_Religion,
+    User_Marriage: state => state.User_Marriage,
+    User_Account: state => state.User_Account,
+    User_Wage: state => state.User_Wage
   })
 }
 </script>

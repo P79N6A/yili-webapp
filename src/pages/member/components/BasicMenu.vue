@@ -21,6 +21,7 @@
 
 <script type="text/javascript">
 import BasicMsg from './BasicMsg'
+import JobSkill from './memberchildren/jobskill'
 export default {
   name: 'BascicMenu',
   data () {
@@ -30,11 +31,11 @@ export default {
           id: '001',
           title: '基本信息',
           children: 'BasicMsg',
-          comshow: true
+          comshow: false
         }, {
           id: '002',
           title: '历史工作经历',
-          children: '',
+          children: 'JobSkill',
           comshow: false
         }, {
           id: '003',
@@ -66,17 +67,20 @@ export default {
     }
   },
   components: {
-    BasicMsg
+    BasicMsg,
+    JobSkill
   },
   methods: {
     BasicSetShow (event) {
       let el = event.currentTarget
       let cids = el.getAttribute('cid')
-      if (cids === '001') {
+      if (cids === '001' || cids === '002') {
         let arrlist = this.BasicList
         arrlist.forEach(function (item) {
           if (item.id === cids) {
             item.comshow = !item.comshow
+          } else {
+            item.comshow = false
           }
         })
       }
