@@ -13,6 +13,8 @@ import Marriage from '@/pages/usermsg/Marriage'
 import Account from '@/pages/usermsg/account'
 import Wage from '@/pages/usermsg/wage'
 import Jobdata from '@/pages/member/components/memberchildren/memberdetails/jobdata'
+import Teachdata from '@/pages/member/components/memberchildren/memberdetails/teachdata'
+import leveldata from '@/pages/member/components/memberchildren/memberdetails/lgleveldata'
 
 Vue.use(Router)
 
@@ -82,6 +84,16 @@ export default new Router({
       path: '/jobdata',
       name: 'Jobdata',
       component: Jobdata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/teachdata',
+      name: 'Teachdata',
+      component: Teachdata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/leveldata',
+      name: 'leveldata',
+      component: leveldata,
       meta: { keepAlive: true }
     }
   ]

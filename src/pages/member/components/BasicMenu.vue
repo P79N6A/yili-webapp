@@ -22,6 +22,9 @@
 <script type="text/javascript">
 import BasicMsg from './BasicMsg'
 import JobSkill from './memberchildren/jobskill'
+import TeachBg from './memberchildren/teachbg'
+import languaGe from './memberchildren/lglevel'
+
 export default {
   name: 'BascicMenu',
   data () {
@@ -40,12 +43,12 @@ export default {
         }, {
           id: '003',
           title: '教育背景',
-          children: '',
+          children: 'TeachBg',
           comshow: false
         }, {
           id: '004',
           title: '外语水平',
-          children: '',
+          children: 'languaGe',
           comshow: false
         }, {
           id: '005',
@@ -68,13 +71,15 @@ export default {
   },
   components: {
     BasicMsg,
-    JobSkill
+    JobSkill,
+    TeachBg,
+    languaGe
   },
   methods: {
     BasicSetShow (event) {
       let el = event.currentTarget
       let cids = el.getAttribute('cid')
-      if (cids === '001' || cids === '002') {
+      if (cids === '001' || cids === '002' || cids === '003' || cids === '004') {
         let arrlist = this.BasicList
         arrlist.forEach(function (item) {
           if (item.id === cids) {

@@ -14,80 +14,67 @@
    <ul class="job_ul">
      <li class="job_li">
        <div class="job_left">
-         *开始时间
+         *语言
+       </div>
+       <div class="job_right">
+           <input type="text" placeholder="请在此处输入"  :value="lgData.Language"/>
+       </div>
+     </li>
+     <li class="job_li">
+       <div class="job_left">
+         等级证书
+       </div>
+       <div class="job_right">
+           <input type="text" placeholder="请在此处输入"  :value="lgData.level"/>
+       </div>
+     </li>
+     <li class="job_li">
+       <div class="job_left">
+         获证日期
        </div>
        <div class="job_right"  @click="setDate">
-          {{JobData.StartTime}}
+          {{lgData.Time}}
           <span class="iconfont job_time">&#xe644;</span>
        </div>
      </li>
      <li class="job_li">
        <div class="job_left">
-         *结束时间
+         总成绩
        </div>
-       <div class="job_right"  @click="setDate2">
-          {{JobData.EndTime}}
-          <span class="iconfont job_time">&#xe644;</span>
+       <div class="job_right">
+           <input type="text" placeholder="请在此处输入" :value="lgData.Grade"/>
        </div>
      </li>
      <li class="job_li">
        <div class="job_left">
-         *工作单位
+         熟练程度
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入"  :value="JobData.JobUnit"/>
-       </div>
-     </li>
-     <li class="job_li">
-       <div class="job_left">
-         *职务
-       </div>
-       <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobOffice"/>
-       </div>
-     </li>
-     <li class="job_li">
-       <div class="job_left">
-         证明人
-       </div>
-       <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobWitness"/>
-       </div>
-     </li>
-     <li class="job_li">
-       <div class="job_left">
-         联系电话
-       </div>
-       <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobWitnessPhone"/>
+           <input type="text" placeholder="请在此处输入" :value="lgData.skilled"/>
        </div>
      </li>
    </ul>
-   <p class="job_title">备注</p>
-   <textarea class="job_memark" placeholder="请在此处输入" :value="JobData.JobRemarks"></textarea>
    <div class="job_keep">
-      <mt-button type="primary" size="normal" class="job_btn" @click="Job_keep">保存</mt-button>
+      <mt-button type="primary" size="normal" class="job_btn">保存</mt-button>
       <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
    </div>
  </div>
 </template>
 <script>
 export default {
-  name: 'Jobdata',
+  name: 'lgleveldata',
   data () {
     return {
       MemberTitle: {
         back: '返回',
-        title: '工作经历'
+        title: '语言能力'
       },
-      JobData: {
-        StartTime: '2010-01-09',
-        EndTime: '2020-09-11',
-        JobUnit: '伊利集团商学院',
-        JobOffice: '销售经理',
-        JobWitness: '汉高祖',
-        JobWitnessPhone: 18792023874,
-        JobRemarks: ''
+      lgData: {
+        Language: '英语',
+        level: '英语六级证书',
+        Time: '2010-01-09',
+        Grade: '70',
+        skilled: '非常熟练'
       }
     }
   },
@@ -96,27 +83,10 @@ export default {
       this.$picker.show({
         type: 'datePicker',
         onOk: (date) => {
-          this.JobData.StartTime = date
+          this.lgData.Time = date
         }
       })
-    },
-    setDate2 () {
-      this.$picker.show({
-        type: 'datePicker',
-        onOk: (e) => {
-          this.JobData.EndTime = e
-        }
-      })
-    },
-    Job_keep () {
-      let name = this.$route.query.name
-      console.log(name)
     }
-  },
-  mounted () {
-    console.log('是否被调用')
-    this.JobData.JobWitness = this.$route.query.name
-    console.log(this.JobData.JobWitness)
   }
 }
 </script>

@@ -36,6 +36,12 @@
         </div>
       </li> -->
     </ul>
+    <p class="job_add" @click="Creat_job">
+      <span class="iconfont job_addimg">&#xe608;</span>
+    </p>
+    <div class="job_footer">
+      <mt-button type="primary" size="large">保存</mt-button>
+    </div>
  </div>
 </template>
 <script>
@@ -82,6 +88,14 @@ export default {
       this.$router.push({
         path: `/jobdata`
       })
+    },
+    Creat_job () {
+      this.$router.push({
+        path: `/jobdata`,
+        query: {
+          name: '哒哒哒'
+        }
+      })
     }
   }
 }
@@ -100,7 +114,7 @@ export default {
   .job-lefttime
     color:$darkTextColor
     .job-lefticon
-      color:blue
+      color:#26a2ff
       font-size:.2rem
     .jobiconbgcolor
       color:red
@@ -124,6 +138,7 @@ export default {
     box-sizing:border-box
     padding-left:.2rem
     width:100%
+    height:.5rem
     color:$darkTextColor
     background:#fff
  .job-right
@@ -134,4 +149,13 @@ export default {
   .job-toDetails
    font-size:.5rem
    color:$darkTextColor
+.job_add
+ box-sizing:border-box
+ padding:0.1rem 0.4rem
+ text-align:right
+ .job_addimg
+  font-size:.5rem
+  color:#26a2ff
+.job_footer
+  padding:0.2rem
 </style>
