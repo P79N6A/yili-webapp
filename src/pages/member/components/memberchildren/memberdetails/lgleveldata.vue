@@ -16,8 +16,8 @@
        <div class="job_left">
          *语言
        </div>
-       <div class="job_right">
-           <input type="text" placeholder="请在此处输入"  :value="lgData.Language"/>
+       <div class="job_right" @click="User_lgSelectsk">
+           {{lgData.Language}}
        </div>
      </li>
      <li class="job_li">
@@ -49,8 +49,8 @@
        <div class="job_left">
          熟练程度
        </div>
-       <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="lgData.skilled"/>
+       <div class="job_right" @click="User_Selectsk">
+           {{lgData.skilled}}
        </div>
      </li>
    </ul>
@@ -58,6 +58,42 @@
       <mt-button type="primary" size="normal" class="job_btn">保存</mt-button>
       <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
    </div>
+   <mt-popup
+    v-model="popupVisible"
+    position="bottom"
+    popup-transition="popup-fade">
+     <mt-picker :slots="slots" @change="onValuesChange"  class="levelselect" showToolbar>
+       <div class="picker-toolbar-title">
+         <div class="usi-btn-cancel" @click="User_Selectsk">
+            取消
+         </div>
+         <div>
+           请选择熟练程度
+         </div>
+         <div class="usi-btn-sure" @click="User_SelectSure">
+           确定
+         </div>
+        </div>
+     </mt-picker>
+   </mt-popup>
+   <mt-popup
+    v-model="lgVisible"
+    position="bottom"
+    popup-transition="popup-fade">
+     <mt-picker :slots="lgslots" @change="lgValuesChange"  class="levelselect" showToolbar>
+       <div class="picker-toolbar-title">
+         <div class="usi-btn-cancel" @click="User_lgSelectsk">
+            取消
+         </div>
+         <div>
+           请选择语言类型
+         </div>
+         <div class="usi-btn-sure" @click="User_lgSelectSure">
+           确定
+         </div>
+        </div>
+     </mt-picker>
+   </mt-popup>
  </div>
 </template>
 <script>
@@ -65,6 +101,23 @@ export default {
   name: 'lgleveldata',
   data () {
     return {
+      popupVisible: false,
+      showToolbar: true,
+      lgVisible: false,
+      slots: [
+        {
+          flex: 1,
+          values: ['一般', '良好', '熟练', '精通'],
+          textAlign: 'center'
+        }
+      ],
+      lgslots: [
+        {
+          flex: 1,
+          values: ['英语', '葡萄牙语', '越南', '拉丁语', '蒙语', '德语', '日语', '法语', '俄语', '韩语', '汉语', '西班牙语', '阿拉伯语'],
+          textAlign: 'center'
+        }
+      ],
       MemberTitle: {
         back: '返回',
         title: '语言能力'
@@ -74,7 +127,7 @@ export default {
         level: '英语六级证书',
         Time: '2010-01-09',
         Grade: '70',
-        skilled: '非常熟练'
+        skilled: '一般'
       }
     }
   },
@@ -86,6 +139,30 @@ export default {
           this.lgData.Time = date
         }
       })
+    },
+    onValuesChange (picker, values) {
+      this.lgData.skilled = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_Selectsk () {
+      this.popupVisible = !this.popupVisible
+    },
+    User_SelectSure () {
+      this.popupVisible = !this.popupVisible
+    },
+    lgValuesChange (picker, values) {
+      this.lgData.Language = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_lgSelectsk () {
+      this.lgVisible = !this.lgVisible
+    },
+    User_lgSelectSure () {
+      this.lgVisible = !this.lgVisible
     }
   }
 }
@@ -162,4 +239,13 @@ export default {
   height:1.5rem
   color: #999
   background:#fff
+.levelselect
+  width:$selectWidth
+  .picker-toolbar-title
+    display:flex
+    flex-direction: row
+    justify-content: space-around
+    height: 40px
+    line-height: 40px
+    font-size: 16px
 </style>
