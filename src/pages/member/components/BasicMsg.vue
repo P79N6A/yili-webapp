@@ -2,44 +2,44 @@
  <div>
     <ul class="Basic-ul">
         <li class="Basic-li">
-            <div class="Basicmsg-left">姓名</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.NameAcitve }">姓名</div>
             <div class="Basicmsg-container">
-                <input type="text" value="张三" />
+                <input type="text" v-model="user.Name" placeholder="请在此处输入姓名"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">国籍</div>
-            <div class="Basicmsgicon-container">{{ContainerName}}</div>
-            <div class="Basicmsgicon-right" @click="Get_userCountry">
+            <div class="Basicmsgicon-container" @click="Get_userCountry">{{ContainerName}}</div>
+         <!--    <div class="Basicmsgicon-right" @click="Get_userCountry">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">证件类型</div>
-            <div class="Basicmsgicon-container">{{user_IdTypeValue}}</div>
-            <div class="Basicmsgicon-right" @click="Get_IDtype">
+            <div class="Basicmsgicon-container" @click="User_SelectIdTypesk">{{user_IdTypeValue}}</div>
+           <!--  <div class="Basicmsgicon-right" @click="User_SelectIdTypesk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">证件号码</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.IDAcitve}">证件号码</div>
             <div class="Basicmsg-container">
                 <input type="text" v-model="user.ID" maxlength="18" @blur="Get_UserIdTest" />
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">性别</div>
-            <div class="Basicmsgicon-container">{{SexValue}}</div>
-            <div class="Basicmsgicon-right" @click="user_GetSexVal">
+            <div class="Basicmsgicon-container" @click="User_Selectsexsk">{{SexValue}}</div>
+           <!--  <div class="Basicmsgicon-right" @click="User_Selectsexsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">民族</div>
-            <div class="Basicmsgicon-container">{{User_Race}}</div>
-              <div class="Basicmsgicon-right" @click="Get_UserRace">
+            <div class="Basicmsgicon-container" @click="User_Selectracesk">{{User_Race}}</div>
+             <!--  <div class="Basicmsgicon-right" @click="User_Selectracesk">
                   <span class="iconfont BasicIconbg" >&#xe603;</span>
-              </div>
+              </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">籍贯</div>
@@ -48,90 +48,90 @@
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">出生日期</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.BornTimeAcitve}">出生日期</div>
             <div class="Basicmsg-container" @click="setDate">{{user.BornTime}}
              <span class="iconfont Basiciconfont-time">&#xe644;</span>
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">参加工作时间</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.jobsTimeAcitve}">参加工作时间</div>
             <div class="Basicmsg-container" @click="setDate2">
-             {{jobsTime}}
+             {{user.jobsTime}}
              <span class="iconfont Basiciconfont-time">&#xe644;</span>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">政治面貌</div>
-            <div class="Basicmsgicon-container">{{User_Political}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserPolitical">
+            <div class="Basicmsgicon-container" @click="User_SelectPoliticalsk">{{user_Political}}</div>
+          <!--   <div class="Basicmsgicon-right" @click="User_SelectPoliticalsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">身高(CM)</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.HeightAcitve}">身高(CM)</div>
             <div class="Basicmsg-container">
-                <input type="number" value="165" oninput="if(value.length>5)value=value.slice(0,5)" />
+                <input type="number" v-model="user.Height" placeholder="请在此处输入身高(应在140~200之间)" oninput="if(value.length>5)value=value.slice(0,5)" />
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">血型</div>
-            <div class="Basicmsgicon-container">{{User_Blood}}</div>
-            <div class="Basicmsgicon-right" @click="User_BloodType">
+            <div class="Basicmsgicon-container" @click="User_SelectBloodsk">{{user_Blood}}</div>
+          <!--   <div class="Basicmsgicon-right" @click="User_SelectBloodsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">宗教信仰</div>
-            <div class="Basicmsgicon-container">{{User_Religion}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserReligion">
+            <div class="Basicmsgicon-container" @click="User_SelectReligionsk">{{user_Religion}}</div>
+          <!--   <div class="Basicmsgicon-right" @click="User_SelectReligionsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">兴趣爱好</div>
             <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="请在此处输入爱好"/>
+                <input type="text" v-model="user.savor" placeholder="请在此处输入爱好"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">个人特长</div>
             <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="请在此处输入特长"/>
+                <input type="text" v-model="user.Specialty" placeholder="请在此处输入特长"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">婚姻状况</div>
-            <div class="Basicmsgicon-container">{{User_Marriage}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserMarriage">
+            <div class="Basicmsgicon-container" @click="User_SelectMarriagesk">{{user_Marriage}}</div>
+          <!--   <div class="Basicmsgicon-right" @click="User_SelectMarriagesk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">户口性质</div>
-            <div class="Basicmsgicon-container">{{User_Account}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserAccount">
+            <div class="Basicmsgicon-container" @click="User_SelectAccountsk">{{user_Account}}</div>
+           <!--  <div class="Basicmsgicon-right" @click="User_SelectAccountsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">原参保地</div>
+            <div class="Basicmsg-left">参保地</div>
             <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="请在此处参保地址"/>
+                <input type="text" v-model="user.Insured" placeholder="请在此处参保地址"/>
             </div>
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">单位发薪周期</div>
-            <div class="Basicmsgicon-container">{{User_Wage}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserWage">
+            <div class="Basicmsgicon-container" @click="User_SelectWagesk">{{user_Wage}}</div>
+        <!--     <div class="Basicmsgicon-right" @click="User_SelectWagesk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsgicon-left">是否独生子女</div>
-            <div class="Basicmsgicon-container">{{user.Only_Child}}</div>
-            <div class="Basicmsgicon-right" @click="Get_UserChild">
+            <div class="Basicmsgicon-container" @click="User_SelectChildsk">{{user_child}}</div>
+          <!--   <div class="Basicmsgicon-right" @click="User_SelectChildsk">
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div>
+            </div> -->
         </li>
         <li class="Basic-li">
             <div class="Basicmsg-left">出生地点</div>
@@ -146,9 +146,9 @@
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">户籍详细地址</div>
-            <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
+            <div class="Basicmsg-left" :class="{ color_error: user.AccountplaceinputAcitve}">户籍详细地址</div>
+            <div class="Basicmsg-container" >
+                <input type="text" v-model="user.Accountplaceinput" placeholder="如道路、门牌号、小区、楼栋号、单元室等"/>
             </div>
         </li>
         <li class="Basic-li">
@@ -158,9 +158,9 @@
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">家庭详细地址</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.FamilyPlaceinputAcitve}">家庭详细地址</div>
             <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
+                <input type="text" v-model="user.FamilyPlaceinput" placeholder="如道路、门牌号、小区、楼栋号、单元室等"/>
             </div>
         </li>
         <li class="Basic-li">
@@ -170,41 +170,15 @@
             </div>
         </li>
         <li class="Basic-li">
-            <div class="Basicmsg-left">现在详细地址</div>
+            <div class="Basicmsg-left" :class="{ color_error: user.NowPlaceinputAcitve}">现在详细地址</div>
             <div class="Basicmsg-container">
-                <input type="text" value="" placeholder="如道路、门牌号、小区等"/>
+                <input type="text" v-model="user.NowPlaceinput" value="" placeholder="如道路、门牌号、小区、楼栋号、单元室等"/>
             </div>
         </li>
         <li class="Basic-li">
-          <mt-button type="primary" size="large">保存</mt-button>
+          <mt-button type="primary" size="large" @click="keep_usermsg">保存</mt-button>
         </li>
     </ul>
-    <div class="Basic_selectsex">
-      <mt-radio
-       v-show="radio_sex"
-       :options="Sexoptions"
-       v-model="SexValue"
-       @change="user_GetSexVal"
-      >
-     </mt-radio>
-    </div>
-    <div class="Basic_selectsex">
-      <mt-radio
-       v-show="user.Only_ChildJudge"
-       :options="User_ChildOptions"
-       v-model="user.Only_Child"
-       @change="Get_UserChild"
-      >
-     </mt-radio>
-    </div>
-    <div class="Basic_selectsex">
-      <mt-radio
-       v-show="user_IdTypeshow"
-       :options="user_IdTypeList"
-       v-model="user_IdTypeValue"
-      >
-     </mt-radio>
-    </div>
     <awesome-picker
       ref="picker4"
       :textTitle="picker4.textTitle"
@@ -250,6 +224,186 @@
       :colorCancel="picker8.areaconbg"
       @confirm="handlePicker8Confirm">
     </awesome-picker>
+    <!--性别-->
+    <mt-popup
+          v-model="sexVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="sexslots" @change="onValuessexChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_Selectsexsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectsexSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--证件类型-->
+     <mt-popup
+          v-model="IdTypeVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="IdTypeslots" @change="onValuesIdTypeChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectIdTypesk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectIdTypeSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--民族-->
+    <mt-popup
+          v-model="raceVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="raceslots" @change="onValuesraceChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_Selectracesk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectraceSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--政治面貌-->
+    <mt-popup
+          v-model="PoliticalVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Politicalslots" @change="onValuesPoliticalChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectPoliticalsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectPoliticalSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--血型-->
+     <mt-popup
+          v-model="BloodVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Bloodslots" @change="onValuesBloodChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectBloodsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectBloodSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--宗教信仰-->
+    <mt-popup
+          v-model="ReligionVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Religionslots" @change="onValuesReligionChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectReligionsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectReligionSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--婚姻状况-->
+    <mt-popup
+          v-model="MarriageVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Marriageslots" @change="onValuesMarriageChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectMarriagesk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectMarriageSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+    <!--户口性质-->
+    <mt-popup
+          v-model="AccountVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Accountslots" @change="onValuesAccountChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectAccountsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectAccountSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+  <!--发薪周期-->
+    <mt-popup
+          v-model="WageVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Wageslots" @change="onValuesWageChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectWagesk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectWageSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
+  <!--独生子女-->
+    <mt-popup
+          v-model="ChildVisible"
+          position="bottom"
+          popup-transition="popup-fade">
+            <mt-picker :slots="Childslots" @change="onValuesChildChange"  class="levelselect" showToolbar>
+                 <div class="picker-toolbar-title">
+                     <div class="usi-btn-cancel" @click="User_SelectChildsk">
+                        取消
+                     </div>
+                     <div>
+                     </div>
+                     <div class="usi-btn-sure" @click="User_SelectChildSure">
+                       确定
+                     </div>
+                  </div>
+           </mt-picker>
+    </mt-popup>
    <div class="overlayer" @touchmove.prevent v-show="Basic_opcatiybg">
    </div>
  </div>
@@ -259,46 +413,74 @@ import Vue from 'vue'
 import areaData from '@/assets/js/area'
 import AwesomePicker from 'vue-awesome-picker'
 import { mapState } from 'vuex'
+import global_ from '@/pages/Global/global'
+import { MessageBox } from 'mint-ui'
 Vue.use(AwesomePicker)
+
 export default {
   name: 'MemberBasic',
   data () {
     return {
       user: {
-        ID: '11010119800101103X',
-        BornTime: '1970-01-01',
+        Name: '张大牛',
+        NameAcitve: false,
         testID: null,
+        ID: '11010119800101103X',
+        IDAcitve: false,
+        BornTime: '1970-01-01',
+        BornTimeAcitve: false,
+        jobsTime: '2018-01-01',
+        jobsTimeAcitve: false,
+        Height: '',
+        HeightAcitve: false,
+        savor: '',
+        Specialty: '',
+        Insured: '',
         HomeTownPlace: '北京市 北京市 东城区',
         Birthplace: '北京市 北京市 东城区',
         Accountplace: '北京市 北京市 东城区',
+        Accountplaceinput: '',
+        AccountplaceinputAcitve: false,
         FamilyPlace: '北京市 北京市 东城区',
+        FamilyPlaceinput: '',
+        FamilyPlaceinputAcitve: false,
         NowPlace: '北京市 北京市 东城区',
-        Only_Child: '否',
-        Only_ChildJudge: false,
-        HomeTownDecide: false,
-        BirthPlaceDecide: false,
-        FamilyPlaceDecide: false,
-        NowPlaceDecide: false,
-        AccountPlaceDecide: false
+        NowPlaceinput: '',
+        NowPlaceinputAcitve: false
       },
-      PlaceDecide: [
-        {'HomeTownDecide': '', 'value': false},
-        {'BirthPlaceDecide': '', 'value': false},
-        {'FamilyPlaceDecide': '', 'value': false},
-        {'NowPlaceDecide': '', 'value': false},
-        {'AccountPlaceDecide': '', 'value': false}
-      ],
+      SexValue: '男',
+      sexVisible: false,
+      SexValue_set: '',
       user_IdTypeValue: '身份证',
-      SexValue: '女',
+      IdTypeVisible: false,
+      user_IdTypeValue_set: '',
+      User_Race: '汉',
+      raceVisible: false,
+      User_Race_set: '',
+      user_Political: '群众',
+      PoliticalVisible: false,
+      user_Political_set: '',
+      user_Blood: 'O型',
+      BloodVisible: false,
+      user_Blood_set: '',
+      user_Religion: '无宗教信仰',
+      ReligionVisible: false,
+      user_Religion_set: '',
+      user_Marriage: '未婚',
+      MarriageVisible: false,
+      user_Marriage_set: '',
+      user_Account: '农业',
+      AccountVisible: false,
+      user_Account_set: '',
+      user_Wage: '当月发当月',
+      WageVisible: false,
+      user_Wage_set: '',
+      user_child: '否',
+      ChildVisible: false,
+      user_child_set: '',
       msg: '../static/images/u236.png',
-      Sexoptions: ['男', '女'],
-      User_ChildOptions: ['是', '否'],
-      radio_sex: false,
       Basic_opcatiybg: false,
-      jobsTime: '2018-01-01',
       country_value: '中国',
-      user_IdTypeList: ['身份证', '台胞证', '港澳通行证'],
-      user_IdTypeshow: false,
       picker4: {
         anchor: [],
         textTitle: '',
@@ -328,30 +510,213 @@ export default {
         textTitle: '',
         areaconbg: '#000',
         data: areaData
-      }
+      },
+      sexslots: [
+        {
+          flex: 1,
+          values: ['男', '女'],
+          textAlign: 'center'
+        }
+      ],
+      IdTypeslots: [
+        {
+          flex: 1,
+          values: ['身份证', '台胞证', '港澳通行证'],
+          textAlign: 'center'
+        }
+      ],
+      raceslots: [
+        {
+          flex: 1,
+          values: ['汉族', '蒙古族', '回族', '藏族', '维吾尔族', '苗族', '彝族', '壮族', '布依族', '朝鲜族', '满族', '侗族', '瑶族', '白族', '土家族', '哈尼族', '哈萨克族', '傣族', '黎族', '傈僳族', '佤族', '畲族', '高山族', '拉祜族', '水族', '东乡族', '纳西族', '景颇族', '柯尔克孜族', '土族', '达斡尔族', '仫佬族', '羌族', '布朗族', '撒拉族', '毛难族', '仡佬族', '锡伯族', '阿昌族', '普米族', '塔吉克族', '怒族', '乌孜别克族', '俄罗斯族', '鄂温克族', '崩龙族', '保安族', '裕固族', '京族', '塔塔尔族', '独龙族', '鄂伦春族', '赫哲族', '门巴族', '珞巴族', '基诺族'],
+          textAlign: 'center'
+        }
+      ],
+      Politicalslots: [
+        {
+          flex: 1,
+          values: ['中共党员', '中共预备党员', '共青团员', '群众', '无党派人士', '九三学社社员', '农工党党员', '台盟盟员', '民建会员', '民盟盟员', '民进会员', '民革会员', '致公党党员'],
+          textAlign: 'center'
+        }
+      ],
+      Bloodslots: [
+        {
+          flex: 1,
+          values: ['A型', 'B型', 'AB型', 'O型', '其他', '不详'],
+          textAlign: 'center'
+        }
+      ],
+      Religionslots: [
+        {
+          flex: 1,
+          values: ['无宗教信仰', '伊斯兰教', '佛教', '天主教', '基督教', '道教'],
+          textAlign: 'center'
+        }
+      ],
+      Marriageslots: [
+        {
+          flex: 1,
+          values: ['已婚', '未婚', '离婚', '丧偶'],
+          textAlign: 'center'
+        }
+      ],
+      Accountslots: [
+        {
+          flex: 1,
+          values: ['农业', '非农业', '台湾籍'],
+          textAlign: 'center'
+        }
+      ],
+      Wageslots: [
+        {
+          flex: 1,
+          values: ['当月发当月', '次月发上月', '无'],
+          textAlign: 'center'
+        }
+      ],
+      Childslots: [
+        {
+          flex: 1,
+          values: ['是', '否'],
+          textAlign: 'center'
+        }
+      ]
     }
   },
   methods: {
-    user_GetSexVal () {
-      this.radio_sex = !this.radio_sex
-      this.Basic_opcatiybg = !this.Basic_opcatiybg
+    User_Selectsexsk () {
+      this.sexVisible = !this.sexVisible
     },
-    Get_IDtype () {
-      this.user_IdTypeshow = !this.user_IdTypeshow
-      this.Basic_opcatiybg = !this.Basic_opcatiybg
+    User_SelectsexSure () {
+      this.SexValue = this.SexValue_set
+      this.sexVisible = !this.sexVisible
     },
-    Get_UserChild () {
-      this.user.Only_ChildJudge = !this.user.Only_ChildJudge
-      this.Basic_opcatiybg = !this.Basic_opcatiybg
+    onValuessexChange (picker, values) {
+      this.SexValue_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectIdTypesk () {
+      this.IdTypeVisible = !this.IdTypeVisible
+    },
+    User_SelectIdTypeSure () {
+      this.user_IdTypeValue = this.user_IdTypeValue_set
+      this.IdTypeVisible = !this.IdTypeVisible
+    },
+    onValuesIdTypeChange (picker, values) {
+      this.user_IdTypeValue_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_Selectracesk () {
+      this.raceVisible = !this.raceVisible
+    },
+    User_SelectraceSure () {
+      this.User_Race = this.User_Race_set
+      this.raceVisible = !this.raceVisible
+    },
+    onValuesraceChange (picker, values) {
+      this.User_Race_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectPoliticalsk () {
+      this.PoliticalVisible = !this.PoliticalVisible
+    },
+    User_SelectPoliticalSure () {
+      this.user_Political = this.user_Political_set
+      this.PoliticalVisible = !this.PoliticalVisible
+    },
+    onValuesPoliticalChange (picker, values) {
+      this.user_Political_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectReligionsk () {
+      this.ReligionVisible = !this.ReligionVisible
+    },
+    User_SelectReligionSure () {
+      this.user_Religion = this.user_Religion_set
+      this.ReligionVisible = !this.ReligionVisible
+    },
+    onValuesReligionChange (picker, values) {
+      this.user_Religion_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectBloodsk () {
+      this.BloodVisible = !this.BloodVisible
+    },
+    User_SelectBloodSure () {
+      this.user_Blood = this.user_Blood_set
+      this.BloodVisible = !this.BloodVisible
+    },
+    onValuesBloodChange (picker, values) {
+      this.user_Blood_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectMarriagesk () {
+      this.MarriageVisible = !this.MarriageVisible
+    },
+    User_SelectMarriageSure () {
+      this.user_Marriage = this.user_Marriage_set
+      this.MarriageVisible = !this.MarriageVisible
+    },
+    onValuesMarriageChange (picker, values) {
+      this.user_Marriage_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectAccountsk () {
+      this.AccountVisible = !this.AccountVisible
+    },
+    User_SelectAccountSure () {
+      this.user_Account = this.user_Account_set
+      this.AccountVisible = !this.AccountVisible
+    },
+    onValuesAccountChange (picker, values) {
+      this.user_Account_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectWagesk () {
+      this.WageVisible = !this.WageVisible
+    },
+    User_SelectWageSure () {
+      this.user_Wage = this.user_Wage_set
+      this.WageVisible = !this.WageVisible
+    },
+    onValuesWageChange (picker, values) {
+      this.user_Wage_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
+    },
+    User_SelectChildsk () {
+      this.ChildVisible = !this.ChildVisible
+    },
+    User_SelectChildSure () {
+      this.user_child = this.user_child_set
+      this.ChildVisible = !this.ChildVisible
+    },
+    onValuesChildChange (picker, values) {
+      this.user_child_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
     },
     Get_userCountry () {
       this.$router.push({
         path: `/container`
-      })
-    },
-    Get_UserRace () {
-      this.$router.push({
-        path: `/race`
       })
     },
     Get_UserIdTest (e) {
@@ -360,8 +725,10 @@ export default {
       }
       let thisValue = e.currentTarget.value
       let VueThis = this
+      console.log(this)
       this.user.ID = thisValue
       this.user.testID = VueThis.$options.methods.ChinaIdChecker(thisValue)
+      // this.user.testID = global_.ChinaIdChecker(thisValue)
       if (this.user.testID) {
         this.$options.methods.User_IdwrtData(VueThis)
       }
@@ -371,14 +738,6 @@ export default {
       let USER_TIME = this.USERyearStr + '-' + this.USERmonthStr + '-' + this.USERdayStr
       data.user.BornTime = USER_TIME
       data.pickerValue = USER_TIME
-    },
-    formatDate (date) {
-      const y = date.getFullYear()
-      let m = date.getMonth() + 1
-      m = m < 10 ? '0' + m : m
-      let d = date.getDate()
-      d = d < 10 ? ('0' + d) : d
-      return y + '-' + m + '-' + d
     },
     ChinaIdChecker (id) {
       this.isOK = false
@@ -535,7 +894,7 @@ export default {
       this.$picker.show({
         type: 'datePicker',
         onOk: (e) => {
-          this.jobsTime = e
+          this.user.jobsTime = e
         }
       })
     },
@@ -545,6 +904,7 @@ export default {
     handlePicker4Confirm (v) {
       this.picker4.anchor = v
       this.value = v ? JSON.stringify(v) : null
+      // console.log('籍贯id是否正确' + JSON.stringify(this.picker4))
       let objarea = JSON.parse(this.value)
       this.user.HomeTownPlace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
     },
@@ -584,56 +944,76 @@ export default {
       let objarea = JSON.parse(this.value)
       this.user.NowPlace = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
     },
-    Get_UserPolitical () {
-      this.$router.push({
-        path: `/political`
-      })
-    },
-    User_BloodType () {
-      this.$router.push({
-        path: `/blood`
-      })
-    },
-    Get_UserReligion () {
-      this.$router.push({
-        path: `/religion`
-      })
-    },
-    Get_UserMarriage () {
-      this.$router.push({
-        path: `/marriage`
-      })
-    },
     Get_UserAccount () {
       this.$router.push({
         path: `/account`
       })
     },
-    Get_UserWage () {
-      this.$router.push({
-        path: `/wage`
-      })
-    }
-  },
-  watch: {
-    user_IdTypeValue () {
-      this.user_IdTypeshow = !this.user_IdTypeshow
-      this.Basic_opcatiybg = !this.Basic_opcatiybg
+    keep_usermsg () {
+      const user = this.user
+      const reg = global_.AddressReg
+      let msgselect = true
+      if (user.Name === '') {
+        user.NameAcitve = true
+        msgselect = false
+      } else {
+        user.NameAcitve = false
+      }
+      if (this.user_IdTypeValue === '身份证') {
+        if (!user.testID) {
+          user.IDAcitve = true
+          msgselect = false
+        } else {
+          user.IDAcitve = false
+        }
+      }
+      if (user.jobsTime < user.BornTime) {
+        user.BornTimeAcitve = true
+        user.jobsTimeAcitve = true
+        msgselect = false
+      } else {
+        user.BornTimeAcitve = false
+        user.jobsTimeAcitve = false
+      }
+      if (user.Height > 200 || user.Height < 140) {
+        user.HeightAcitve = true
+        msgselect = false
+      } else {
+        user.HeightAcitve = false
+      }
+      if (!reg.test(user.Accountplaceinput)) {
+        user.AccountplaceinputAcitve = true
+        msgselect = false
+      } else {
+        user.AccountplaceinputAcitve = false
+      }
+      if (!reg.test(user.FamilyPlaceinput)) {
+        user.FamilyPlaceinputAcitve = true
+        msgselect = false
+      } else {
+        user.FamilyPlaceinputAcitve = false
+      }
+      if (!reg.test(user.NowPlaceinput)) {
+        user.NowPlaceinputAcitve = true
+        msgselect = false
+      } else {
+        user.NowPlaceinputAcitve = false
+      }
+      if (msgselect) {
+        MessageBox('信息正确', '信息修改成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
     }
   },
   computed: mapState({
-    ContainerName: state => state.ContainerName,
-    User_Race: state => state.User_Race,
-    User_Political: state => state.User_Political,
-    User_Blood: state => state.User_Blood,
-    User_Religion: state => state.User_Religion,
-    User_Marriage: state => state.User_Marriage,
-    User_Account: state => state.User_Account,
-    User_Wage: state => state.User_Wage
+    ContainerName: state => state.ContainerName
   })
 }
 </script>
 <style lang="stylus" scoped>
+@import '~@/assets/styles/varibles.styl'
+@import '~@/assets/styles/minxs.styl'
 .Basic-top
   box-sizing: border-box
   display:flex
@@ -682,6 +1062,9 @@ export default {
      padding-left:.3rem
      flex:9
      color:#000000
+     ellipsis()
+     input
+      width:100%
      .Basiciconfont-time
        margin-left:.1rem
    .Basicmsgicon-left
@@ -689,7 +1072,7 @@ export default {
      text-align:right
      color:#797979
    .Basicmsgicon-container
-     flex:7
+     flex:9
      padding-left:.3rem
      color:#000000
    .Basicmsgicon-right
@@ -712,4 +1095,15 @@ export default {
     top: 5rem
     width:100%
     z-index:11
+.levelselect
+  width:$selectWidth
+  .picker-toolbar-title
+    display:flex
+    flex-direction: row
+    justify-content: space-around
+    height: 40px
+    line-height: 40px
+    font-size: 16px
+.color_error
+  color: red !important
 </style>

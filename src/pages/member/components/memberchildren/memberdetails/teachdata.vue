@@ -40,10 +40,10 @@
          </div>
        </li>
        <li class="job_li">
-         <div class="job_left">
+         <div class="job_left" >
            *学校类型
          </div>
-         <div class="job_right" @click="Get_SchoolType">
+         <div class="job_right"  @click="User_Selectschoolsk">
              {{JobData.unitType}}
          </div>
        </li>
@@ -51,7 +51,7 @@
          <div class="job_left">
            *学历
          </div>
-         <div class="job_right" @click="Get_UserEducation">
+         <div class="job_right" @click="User_Selecteducationsk">
              {{JobData.education}}
          </div>
        </li>
@@ -59,7 +59,7 @@
          <div class="job_left">
            专业类别
          </div>
-         <div class="job_right" @click="Get_Profession">
+         <div class="job_right" @click="User_SelectProfessionsk">
              {{JobData.ProfessionType}}
          </div>
        </li>
@@ -75,7 +75,7 @@
          <div class="job_left">
            教育形式
          </div>
-         <div class="job_right" @click="Get_TeachType">
+         <div class="job_right" @click="User_SelectTeachModussk">
              {{JobData.TeachModus}}
          </div>
        </li>
@@ -103,23 +103,86 @@
         <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
      </div>
     </div>
-   <!--子组件-->
-   <teach-school v-show="teach_control.school" :control="teach_control" @GetSchool="School_Name"></teach-school>
-   <teach-education v-show="teach_control.education" @GetEducation="User_Education"></teach-education>
-   <profession-type v-show="teach_control.profession" @GetProfession="User_Profession"></profession-type>
-   <teach-modus v-show="teach_control.mouds" @ChangeUserModus="Get_UserModus"></teach-modus>
+    <mt-popup
+        v-model="schoolVisible"
+        position="bottom"
+        popup-transition="popup-fade">
+      <mt-picker :slots="schoolslots" @change="onValuesschoolChange"  class="levelselect" showToolbar>
+           <div class="picker-toolbar-title">
+               <div class="usi-btn-cancel" @click="User_Selectschoolsk">
+                  取消
+               </div>
+               <div>
+               </div>
+               <div class="usi-btn-sure" @click="User_SelectschoolSure">
+                 确定
+               </div>
+            </div>
+     </mt-picker>
+   </mt-popup>
+   <mt-popup
+        v-model="educationVisible"
+        position="bottom"
+        popup-transition="popup-fade">
+      <mt-picker :slots="educationslots" @change="onValueseducationChange"  class="levelselect" showToolbar>
+           <div class="picker-toolbar-title">
+               <div class="usi-btn-cancel" @click="User_Selecteducationsk">
+                  取消
+               </div>
+               <div>
+               </div>
+               <div class="usi-btn-sure" @click="User_SelecteducationSure">
+                 确定
+               </div>
+            </div>
+     </mt-picker>
+   </mt-popup>
+   <mt-popup
+        v-model="ProfessionVisible"
+        position="bottom"
+        popup-transition="popup-fade">
+      <mt-picker :slots="Professionslots" @change="onValuesProfessionChange"  class="levelselect" showToolbar>
+           <div class="picker-toolbar-title">
+               <div class="usi-btn-cancel" @click="User_SelectProfessionsk">
+                  取消
+               </div>
+               <div>
+               </div>
+               <div class="usi-btn-sure" @click="User_SelecteProfessionSure">
+                 确定
+               </div>
+            </div>
+     </mt-picker>
+   </mt-popup>
+    <mt-popup
+        v-model="TeachModusVisible"
+        position="bottom"
+        popup-transition="popup-fade">
+      <mt-picker :slots="TeachModusslots" @change="onValuesTeachModusChange"  class="levelselect" showToolbar>
+           <div class="picker-toolbar-title">
+               <div class="usi-btn-cancel" @click="User_SelectTeachModussk">
+                  取消
+               </div>
+               <div>
+               </div>
+               <div class="usi-btn-sure" @click="User_SelecteTeachModusSure">
+                 确定
+               </div>
+            </div>
+     </mt-picker>
+   </mt-popup>
  </div>
 </template>
 <script>
-import TeachSchool from '@/pages/usermsg/SchoolType'
-import TeachEducation from '@/pages/usermsg/education'
-import ProfessionType from '@/pages/usermsg/ProfessionType'
-import TeachModus from '@/pages/usermsg/TeachModus'
 
 export default {
   name: 'teachdata',
   data () {
     return {
+      schoolVisible: false,
+      educationVisible: false,
+      ProfessionVisible: false,
+      TeachModusVisible: false,
       teach_control: {
         school: false,
         education: false,
@@ -142,15 +205,41 @@ export default {
         TeachModus: '全日制',
         CertificateNumber: '104765201605701784',
         DegreeNumber: '104765201605701784',
-        Remarks: ''
-      }
+        Remarks: '',
+        unitType_set: '',
+        education_set: '',
+        ProfessionType_set: '',
+        TeachModus_set: ''
+      },
+      schoolslots: [
+        {
+          flex: 1,
+          values: ['985高等学校', '211高等学校', '普通高等学校', '成人高等学校', '党校', '专业类院校', '科研机构', '网络教育', '自学考试', '其他'],
+          textAlign: 'center'
+        }
+      ],
+      educationslots: [
+        {
+          flex: 1,
+          values: ['初中', '高中', '中技', '中专', '大专', '大学', '硕士研究生', '博士研究生', '博士后'],
+          textAlign: 'center'
+        }
+      ],
+      Professionslots: [
+        {
+          flex: 1,
+          values: ['哲学', '经济学', '法学', '教育学', '文学', '艺术学', '历史学', '理学', '工学', '农学', '医学', '管理学', '军事学', '无'],
+          textAlign: 'center'
+        }
+      ],
+      TeachModusslots: [
+        {
+          flex: 1,
+          values: ['普通全日制', '在职全脱产', '在职半脱产', '在职不脱产', '远程教育'],
+          textAlign: 'center'
+        }
+      ]
     }
-  },
-  components: {
-    TeachSchool,
-    TeachEducation,
-    ProfessionType,
-    TeachModus
   },
   methods: {
     setDate () {
@@ -172,51 +261,57 @@ export default {
     Job_keep () {
       console.log('我是保存按钮')
     },
-    Get_SchoolType () {
-      this.teach_control.school = !this.teach_control.school
+    User_Selectschoolsk () {
+      this.schoolVisible = !this.schoolVisible
     },
-    School_Name (item) {
-      this.JobData.unitType = item
-      this.teach_control.school = !this.teach_control.school
+    User_SelectschoolSure () {
+      this.JobData.unitType = this.JobData.unitType_set
+      this.schoolVisible = !this.schoolVisible
     },
-    Get_UserEducation () {
-      this.teach_control.education = !this.teach_control.education
+    onValuesschoolChange (picker, values) {
+      this.JobData.unitType_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
     },
-    User_Education (item) {
-      this.JobData.education = item
-      this.teach_control.education = !this.teach_control.education
+    User_Selecteducationsk () {
+      this.educationVisible = !this.educationVisible
     },
-    Get_Profession () {
-      this.teach_control.profession = !this.teach_control.profession
+    User_SelecteducationSure () {
+      this.JobData.education = this.JobData.education_set
+      this.educationVisible = !this.educationVisible
     },
-    User_Profession (item) {
-      this.JobData.ProfessionType = item
-      this.teach_control.profession = !this.teach_control.profession
+    onValueseducationChange (picker, values) {
+      this.JobData.education_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
     },
-    Get_TeachType () {
-      this.teach_control.mouds = !this.teach_control.mouds
+    User_SelectProfessionsk () {
+      this.ProfessionVisible = !this.ProfessionVisible
     },
-    Get_UserModus (item) {
-      this.JobData.TeachModus = item
-      this.teach_control.mouds = !this.teach_control.mouds
-    }
-  },
-  mounted () {
-    // this.JobData.JobWitness = this.$route.query.name
-    // console.log(this.JobData.JobWitness)
-  },
-  watch: {
-    'teach_control.school' () {
-      this.teach_control.Menu = !this.teach_control.Menu
+    User_SelecteProfessionSure () {
+      this.JobData.ProfessionType = this.JobData.ProfessionType_set
+      this.ProfessionVisible = !this.ProfessionVisible
     },
-    'teach_control.education' () {
-      this.teach_control.Menu = !this.teach_control.Menu
+    onValuesProfessionChange (picker, values) {
+      this.JobData.ProfessionType_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
     },
-    'teach_control.profession' () {
-      this.teach_control.Menu = !this.teach_control.Menu
+    User_SelectTeachModussk () {
+      this.TeachModusVisible = !this.TeachModusVisible
     },
-    'teach_control.mouds' () {
-      this.teach_control.Menu = !this.teach_control.Menu
+    User_SelecteTeachModusSure () {
+      this.JobData.TeachModus = this.JobData.TeachModus_set
+      this.TeachModusVisible = !this.TeachModusVisible
+    },
+    onValuesTeachModusChange (picker, values) {
+      this.JobData.TeachModus_set = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0])
+      }
     }
   }
 }
@@ -302,4 +397,13 @@ export default {
   height: 100%
   opacity: 0.5
   background: #000
+.levelselect
+  width:$selectWidth
+  .picker-toolbar-title
+    display:flex
+    flex-direction: row
+    justify-content: space-around
+    height: 40px
+    line-height: 40px
+    font-size: 16px
 </style>

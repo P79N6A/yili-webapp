@@ -2,14 +2,13 @@
     <div class="Basic_Menutop">
       <ul class="Basic_ul">
             <li  v-for="item of BasicList" :key="item.id">
-                <div class="Basic-top" @click="BasicSetShow" :cid="item.id">
+                <div class="Basic-top">
                     <div class="Basic-topbg">
                     </div>
                     <div class="Basic-title">
-                    <span class="Basicmsg">{{item.title}}</span>
+                    <span class="Basicmsg"  @click="BasicSetShow" :cid="item.id">{{item.title}}</span>
                     <div class="Basic-Up">
-                        <span class="iconfont Basicfontdown" v-show="!item.comshow">&#xe603;</span>
-                        <span class="iconfont Basicfont" v-show="item.comshow">&#xe60b;</span>
+                        <span class="iconfont Basicfont" @click="BasicRead" :cids="item.id">&#xe646;</span>
                     </div>
                   </div>
                 </div>
@@ -21,9 +20,12 @@
 
 <script type="text/javascript">
 import BasicMsg from './BasicMsg'
-import JobSkill from './memberchildren/jobskill'
-import TeachBg from './memberchildren/teachbg'
-import languaGe from './memberchildren/lglevel'
+import BasicJob from './memberchildren/jobskill'
+import BasicTeach from './memberchildren/teachbg'
+import BasicLanguage from './memberchildren/lglevel'
+import BasicFamily from './memberchildren/family'
+import BasicHealth from './memberchildren/health'
+import BasicYili from './memberchildren/yilijob'
 
 export default {
   name: 'BascicMenu',
@@ -38,32 +40,32 @@ export default {
         }, {
           id: '002',
           title: '历史工作经历',
-          children: 'JobSkill',
+          children: 'BasicJob',
           comshow: false
         }, {
           id: '003',
           title: '教育背景',
-          children: 'TeachBg',
+          children: 'BasicTeach',
           comshow: false
         }, {
           id: '004',
           title: '外语水平',
-          children: 'languaGe',
+          children: 'BasicLanguage',
           comshow: false
         }, {
           id: '005',
           title: '家庭成员',
-          children: '',
+          children: 'BasicFamily',
           comshow: false
         }, {
           id: '006',
           title: '健康信息',
-          children: '',
+          children: 'BasicHealth',
           comshow: false
         }, {
           id: '007',
           title: '在伊利工作亲属关系',
-          children: '',
+          children: 'BasicYili',
           comshow: false
         }
       ]
@@ -71,22 +73,56 @@ export default {
   },
   components: {
     BasicMsg,
-    JobSkill,
-    TeachBg,
-    languaGe
+    BasicJob,
+    BasicTeach,
+    BasicLanguage,
+    BasicFamily,
+    BasicHealth,
+    BasicYili
   },
   methods: {
     BasicSetShow (event) {
       let el = event.currentTarget
       let cids = el.getAttribute('cid')
-      if (cids === '001' || cids === '002' || cids === '003' || cids === '004') {
-        let arrlist = this.BasicList
-        arrlist.forEach(function (item) {
-          if (item.id === cids) {
-            item.comshow = !item.comshow
-          } else {
-            item.comshow = false
-          }
+      let arrlist = this.BasicList
+      arrlist.forEach(function (item) {
+        if (item.id === cids) {
+          item.comshow = !item.comshow
+        } else {
+          item.comshow = false
+        }
+      })
+    },
+    BasicRead (event) {
+      let el = event.currentTarget
+      let cids = el.getAttribute('cids')
+      if (cids === '001') {
+        this.$router.push({
+          path: `/usernorm`
+        })
+      } else if (cids === '002') {
+        this.$router.push({
+          path: `/userjobnorm`
+        })
+      } else if (cids === '003') {
+        this.$router.push({
+          path: `/userteachnorm`
+        })
+      } else if (cids === '004') {
+        this.$router.push({
+          path: `/userlanguagenorm`
+        })
+      } else if (cids === '005') {
+        this.$router.push({
+          path: `/userfamilynorm`
+        })
+      } else if (cids === '006') {
+        this.$router.push({
+          path: `/userhealthnorm`
+        })
+      } else if (cids === '007') {
+        this.$router.push({
+          path: `/useryilinorm`
         })
       }
     }
@@ -123,7 +159,7 @@ export default {
     .Basic-Up
       margin-top:-0.2rem
       .Basicfont
-       font-size:.6rem
+       font-size:.5rem
        color:rgba(28, 170, 254, 1)
       .Basicfontdown
        font-size:.5rem

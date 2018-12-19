@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+         '/api': {
+            target: 'http://10.60.138.214:8002/PSIGW/RESTListeningConnector/PSFT_HR/HPSAWESUMIT.v1',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/api': '/'
+            }
+        }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

@@ -12,9 +12,19 @@ import Religion from '@/pages/usermsg/religion'
 import Marriage from '@/pages/usermsg/Marriage'
 import Account from '@/pages/usermsg/account'
 import Wage from '@/pages/usermsg/wage'
+import usernorm from '@/pages/usernorm/userBasic'
+import userjobnorm from '@/pages/usernorm/userjob'
+import userteachnorm from '@/pages/usernorm/userteachbg'
+import userlanguagenorm from '@/pages/usernorm/userlanguage'
+import userhealthnorm from '@/pages/usernorm/userhealth'
+import userfamilynorm from '@/pages/usernorm/userfamily'
+import useryilinorm from '@/pages/usernorm/useryili'
 import Jobdata from '@/pages/member/components/memberchildren/memberdetails/jobdata'
 import Teachdata from '@/pages/member/components/memberchildren/memberdetails/teachdata'
 import leveldata from '@/pages/member/components/memberchildren/memberdetails/lgleveldata'
+import familydata from '@/pages/member/components/memberchildren/memberdetails/familydata'
+import healthdata from '@/pages/member/components/memberchildren/memberdetails/healthdata'
+import yilimandata from '@/pages/member/components/memberchildren/memberdetails/yilijobdata'
 
 Vue.use(Router)
 
@@ -94,6 +104,56 @@ export default new Router({
       path: '/leveldata',
       name: 'leveldata',
       component: leveldata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/familydata',
+      name: 'familydata',
+      component: familydata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/healthdata',
+      name: 'healthdata',
+      component: healthdata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/yilimandata',
+      name: 'yilimandata',
+      component: yilimandata,
+      meta: { keepAlive: true }
+    }, {
+      path: '/usernorm',
+      name: 'usernorm',
+      component: usernorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/userjobnorm',
+      name: 'userjobnorm',
+      component: userjobnorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/userteachnorm',
+      name: 'userteachnorm',
+      component: userteachnorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/userlanguagenorm',
+      name: 'userlanguagenorm',
+      component: userlanguagenorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/userhealthnorm',
+      name: 'userhealthnorm',
+      component: userhealthnorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/userfamilynorm',
+      name: 'userfamilynorm',
+      component: userfamilynorm,
+      meta: { keepAlive: true }
+    }, {
+      path: '/useryilinorm',
+      name: 'useryilinorm',
+      component: useryilinorm,
       meta: { keepAlive: true }
     }
   ]

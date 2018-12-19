@@ -85,7 +85,7 @@ export default {
         EndTime: '2020-09-11',
         JobUnit: '伊利集团商学院',
         JobOffice: '销售经理',
-        JobWitness: '汉高祖',
+        JobWitness: '李小明',
         JobWitnessPhone: 18792023874,
         JobRemarks: ''
       }
