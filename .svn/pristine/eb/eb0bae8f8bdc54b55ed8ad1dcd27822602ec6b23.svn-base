@@ -1,0 +1,74 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
+// 这里定义初始值
+let state = {
+  count: 0,
+  ContainerName: '中国'
+}
+
+const mutations = {
+  add (context) {
+    context.count++
+  },
+  decrease (context) {
+    context.count--
+  },
+  increment (context, name) {
+    context.ContainerName = name
+  }
+}
+
+// 事件触发后的逻辑操作
+// 参数为事件函数
+const actions = {
+  add (add) {
+    add.commit('add')
+  },
+  decrease (decrease) {
+    decrease.commit('decrease')
+  },
+  oddAdd ({commit, state}) {
+    if (state.count % 2 === 0) {
+      commit('add')
+    }
+  }
+}
+
+// 返回改变后的数值
+const getters = {
+  count (context) {
+    return context.count
+  },
+  getOdd (context) {
+    return context.count % 2 === 0 ? '偶数' : '奇数'
+  }
+}
+
+const moduleA = {
+  state: {
+    HealthList: [
+      {
+        id: '001',
+        starttime: '2018-01-10',
+        endtime: '2020-10-10',
+        unit: '我是管理数据',
+        marker: '这是一个健康证的备注这是一个健康证的备注这是一个健康证的备注这是一个健康证的备注'
+      }
+    ]
+  },
+  mutations: {
+    HealthAddMsg (context, msg) {
+      context.HealthList.push(msg)
+    }
+  }
+}
+export default new Vuex.Store({
+  state,
+  mutations,
+  actions,
+  getters,
+  modules: {
+    health: moduleA
+  }
+})

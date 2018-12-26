@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-        <li class="family-li" v-for="item of FamilyList" :key="item.id">
+        <li class="family-li" v-for="item of Familydatalist" :key="item.id">
             <div class="family-left">
               <ul>
                   <li class="familymenu">
@@ -70,6 +70,14 @@
                   </li>
                   <li class="familymenu">
                       <div class="familymenu-left">
+                          详细住址信息
+                      </div>
+                      <div class="familymenu-right">
+                          {{item.inaddress}}
+                      </div>
+                  </li>
+                  <li class="familymenu">
+                      <div class="familymenu-left">
                           紧急联系人
                       </div>
                       <div class="familymenu-right">
@@ -102,21 +110,20 @@
                   </li>
               </ul>
             </div>
-             <div class="family-right" @click="To_familyDetails">
+             <div class="family-right" @click="To_familyDetails(item.id)">
                  <span class="iconfont family-img">&#xe601;</span>
              </div>
         </li>
     </ul>
-    <p class="job_add" >
+    <p class="job_add" @click="To_familyDetails()">
       <span class="iconfont job_addimg">&#xe608;</span>
     </p>
-    <div class="job_footer">
-      <mt-button type="primary" size="large">保存</mt-button>
-    </div>
   </div>
 </template>
 
 <script type="text/javascript">
+import { mapState } from 'vuex'
+
 export default {
   name: 'family',
   data () {
@@ -131,7 +138,8 @@ export default {
           ContactPhone: '187123324243',
           unit: '伊利商学院',
           Identity: '主管',
-          address: '伊利商学院职工宿舍',
+          address: '北京市 直辖区 东城区',
+          inaddress: '伊利商学院职工宿舍',
           urgent: '是',
           yilijob: '否',
           StaffID: '140XXXXXXXXX',
@@ -155,20 +163,26 @@ export default {
     }
   },
   methods: {
-    To_familyDetails () {
+    To_familyDetails (itemid) {
       this.$router.push({
         path: `/familydata`,
         query: {
-          name: '哒哒哒'
+          name: itemid
         }
       })
     }
+  },
+  computed: {
+    ...mapState({
+      Familydatalist: state => state.family.FamilyList
+    })
   }
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '~@/assets/styles/varibles.styl'
+@import '~@/assets/styles/minxs.styl'
 .family-li
   display:flex
   padding:.2rem
@@ -188,6 +202,7 @@ export default {
      box-sizing:border-box
      padding-left:.2rem
      flex:6
+     ellipsis()
   .family-right
    display:flex
    flex:2

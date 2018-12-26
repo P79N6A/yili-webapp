@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-        <li class="family-li" v-for="item of yiliList" :key="item.id">
+        <li class="family-li" v-for="item of yilijobdatalist" :key="item.id">
             <div class="family-left">
               <ul>
                   <li class="familymenu">
@@ -46,21 +46,20 @@
                   </li>
               </ul>
             </div>
-             <div class="family-right" @click="To_familyDetails">
+             <div class="family-right" @click="To_familyDetails(item.id)">
                  <span class="iconfont family-img">&#xe601;</span>
              </div>
         </li>
     </ul>
-    <p class="job_add" >
+    <p class="job_add" @click="To_familyDetails()">
       <span class="iconfont job_addimg">&#xe608;</span>
     </p>
-    <div class="job_footer">
-      <mt-button type="primary" size="large">保存</mt-button>
-    </div>
   </div>
 </template>
 
 <script type="text/javascript">
+import { mapState } from 'vuex'
+
 export default {
   name: 'yilijob',
   data () {
@@ -78,14 +77,19 @@ export default {
     }
   },
   methods: {
-    To_familyDetails () {
+    To_familyDetails (itemid) {
       this.$router.push({
         path: `/yilimandata`,
         query: {
-          name: '哒哒哒'
+          name: itemid
         }
       })
     }
+  },
+  computed: {
+    ...mapState({
+      yilijobdatalist: state => state.yilijobdatalist.yilijobdatalist
+    })
   }
 }
 </script>
@@ -105,14 +109,14 @@ export default {
     height: .7rem
     line-height: .7rem
     .familymenu-left
-     flex:3
+     flex:4
      text-align:right
      color:$darkTextColor
     .familymenu-right
      box-sizing:border-box
      padding-left:.2rem
      width:0
-     flex:9
+     flex:8
      ellipsis()
   .family-right
    display:flex

@@ -1,0 +1,91 @@
+{
+  "_from": "vue-awesome-picker",
+  "_id": "vue-awesome-picker@1.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-JC1dIMxcqE0vLzr/QeCKArHkDyKFAqfKz4g0bpYANToXWhF4J8xhXAffGseayGw4fymF/LCvtxI50F4L/s5yQA==",
+  "_location": "/vue-awesome-picker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-awesome-picker",
+    "name": "vue-awesome-picker",
+    "escapedName": "vue-awesome-picker",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-awesome-picker/-/vue-awesome-picker-1.1.0.tgz",
+  "_shasum": "44f200cbc733d737debdb90e3107e64e94b8d105",
+  "_spec": "vue-awesome-picker",
+  "_where": "D:\\vue-list\\demo",
+  "author": {
+    "name": "Fyerl",
+    "email": "fyerl@foxmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Fyerl/vue-awesome-picker/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "better-scroll": "^1.9.0",
+    "reset-css": "^2.2.1",
+    "vue": "^2.5.11"
+  },
+  "deprecated": false,
+  "description": "A Vue.js Picker Component",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "file-loader": "^1.1.4",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "vue-loader": "^13.0.5",
+    "vue-template-compiler": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1"
+  },
+  "homepage": "https://github.com/Fyerl/vue-awesome-picker#readme",
+  "keywords": [
+    "vue",
+    "awesome",
+    "picker",
+    "cascade",
+    "components",
+    "better-scroll"
+  ],
+  "license": "MIT",
+  "main": "dist/vue-awesome-picker.js",
+  "name": "vue-awesome-picker",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fyerl/vue-awesome-picker.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --host 0.0.0.0",
+    "lint": "eslint --ext .js,.vue src"
+  },
+  "version": "1.1.0"
+}

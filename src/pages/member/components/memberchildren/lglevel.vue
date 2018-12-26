@@ -1,7 +1,7 @@
 <template>
    <div>
        <ul>
-           <li class="lglevel-li" v-for="item of languagelist" :key="item.index">
+           <li class="lglevel-li" v-for="item of languagedatalist" :key="item.index">
                <div class="level-left">
                    <ul>
                         <li class="lgmenu-li">
@@ -46,48 +46,77 @@
                         </li>
                    </ul>
                </div>
-               <div class="level-right" @click="To_leveldata">
+               <div class="level-right" @click="To_leveldata(item.id)">
                    <span class="iconfont lg-toDetails">&#xe601;</span>
                </div>
            </li>
        </ul>
        <p class="lg_add">
-        <span class="iconfont lg_addimg">&#xe608;</span>
+        <span class="iconfont lg_addimg" @click="To_leveldata()">&#xe608;</span>
        </p>
-       <div class="lg_footer">
-          <mt-button type="primary" size="large">保存</mt-button>
-       </div>
    </div>
 </template>
 
 <script type="text/javascript">
+import { mapState } from 'vuex'
+
 export default {
   name: 'language',
   data () {
     return {
       languagelist: [
         {
+          id: '001',
           language: '英语',
           level: '英语六级证书',
           date: '2018-09-09',
           Grade: 70,
           skilled: '非常熟练'
         }, {
+          id: '002',
           language: '日语',
           level: '日语二级证书',
           date: '2018-09-09',
           Grade: 70,
           skilled: '非常熟练'
         }
-      ]
+      ],
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight,
+      originHeight: document.documentElement.clientHeight
     }
   },
   methods: {
-    To_leveldata () {
+    To_leveldata (itemid) {
       this.$router.push({
-        path: `/leveldata`
+        path: `/leveldata`,
+        query: {
+          name: itemid
+        }
       })
     }
+  },
+  mounted () {
+    let self = this
+    window.onresize = function () {
+      return (function () {
+        self.screenHeight = document.documentElement.clientHeight
+      })()
+    }
+  },
+  watch: {
+    screenHeight (val) {
+      if (this.originHeight > val) {
+        this.isOriginHei = false
+      } else {
+        this.isOriginHei = true
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      languagedatalist: state => state.language.languagedatalist
+    })
   }
 }
 </script>

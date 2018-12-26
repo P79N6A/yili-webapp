@@ -16,8 +16,8 @@
            <div class="job_left">
              姓名
            </div>
-           <div class="job_right">
-              <input type="text"  :value="yiliman.name" />
+           <div class="job_right" :class="{ color_error: yiliman.nameActive}">
+              <input type="text"  v-model="yiliman.name" />
            </div>
          </li>
          <li class="job_li">
@@ -29,11 +29,11 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: yiliman.phoneActive}">
              联系方式
            </div>
            <div class="job_right">
-               <input type="text" :value="yiliman.phone" placeholder="请在此输入" />
+               <input type="number" v-model="yiliman.phone" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode)))' placeholder="请在此输入" />
            </div>
          </li>
          <li class="job_li">
@@ -41,7 +41,7 @@
              所在单位
            </div>
            <div class="job_right">
-               <input type="text" :value="yiliman.unit"  placeholder="请在此输入"/>
+               <input type="text" v-model="yiliman.unit"  placeholder="请在此输入"/>
            </div>
          </li>
          <li class="job_li">
@@ -49,13 +49,13 @@
              职位
            </div>
            <div class="job_right">
-               <input type="text" :value="yiliman.office"  placeholder="请在此输入"/>
+               <input type="text" v-model="yiliman.office"  placeholder="请在此输入"/>
            </div>
          </li>
        </ul>
-       <div class="job_keep">
-          <mt-button type="primary" size="normal" class="job_btn">保存</mt-button>
-          <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+       <div class="job_keep" v-show="isOriginHei">
+          <mt-button type="primary" size="normal" class="job_btn" @click="yilijob_keep">保存</mt-button>
+          <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="yilijob_remove">删除</mt-button>
        </div>
     <mt-popup
         v-model="parentVisible"
@@ -78,6 +78,8 @@
 </template>
 
 <script type="text/javascript">
+import { MessageBox } from 'mint-ui'
+import global_ from '@/pages/Global/global'
 
 export default {
   name: 'yilimandata',
@@ -90,8 +92,10 @@ export default {
       },
       yiliman: {
         name: '李大牛',
+        nameActive: false,
         relation: '父',
         phone: '18712307349',
+        phoneActive: false,
         unit: '伊利商学院',
         office: '培训主管',
         relation_set: '父'
@@ -102,7 +106,10 @@ export default {
           values: ['配偶', '子', '女', '父/母', '兄/嫂', '弟/弟媳', '姐/姐夫', '妹/妹夫', '其他'],
           textAlign: 'center'
         }
-      ]
+      ],
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight,
+      originHeight: document.documentElement.clientHeight
     }
   },
   methods: {
@@ -117,6 +124,105 @@ export default {
       this.yiliman.relation_set = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0])
+      }
+    },
+    yilijob_keep () {
+      let msgboolean = true
+      const yiliman = this.yiliman
+      const reg = global_.userPhone
+      const tellreg = global_.usertellPhone
+      const ID = this.$route.query.name
+      if (yiliman.name === '') {
+        yiliman.nameActive = true
+        msgboolean = false
+      } else {
+        yiliman.nameActive = false
+      }
+      if (yiliman.phone === '') {
+        yiliman.phoneActive = true
+        msgboolean = false
+      } else if (yiliman.phone !== '') {
+        let phoneone = yiliman.phone.substring(0, 1)
+        if (phoneone === '1') {
+          if (!reg.test(yiliman.phone)) {
+            yiliman.phoneActive = true
+            msgboolean = false
+          } else {
+            yiliman.phoneActive = false
+          }
+        } else if (phoneone !== '1') {
+          if (!tellreg.test(yiliman.phone)) {
+            yiliman.phoneActive = true
+            msgboolean = false
+          } else {
+            yiliman.phoneActive = false
+          }
+        }
+      }
+      if (msgboolean) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.yilijobdatalist.yilijobdatalist.length + 1
+          let addmsg = {
+            id: listlength,
+            name: yiliman.name,
+            relation: yiliman.relation,
+            phone: yiliman.phone,
+            unit: yiliman.unit,
+            office: yiliman.office
+          }
+          this.$store.commit('yiliAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            name: yiliman.name,
+            relation: yiliman.relation,
+            phone: yiliman.phone,
+            unit: yiliman.unit,
+            office: yiliman.office
+          }
+          this.$store.commit('yiliWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
+    },
+    yilijob_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('yilihRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      }
+    }
+  },
+  mounted () {
+    let self = this
+    window.onresize = function () {
+      return (function () {
+        self.screenHeight = document.documentElement.clientHeight
+      })()
+    }
+  },
+  watch: {
+    screenHeight (val) {
+      if (this.originHeight > val) {
+        this.isOriginHei = false
+      } else {
+        this.isOriginHei = true
       }
     }
   },
@@ -139,6 +245,32 @@ export default {
         }
       ]
       return parentslots
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    const yiliman = this.yiliman
+    yiliman.nameActive = false
+    yiliman.phoneActive = false
+    if (ID === undefined) {
+      console.log('创建新模板')
+      yiliman.name = ''
+      yiliman.relation = '父'
+      yiliman.phone = ''
+      yiliman.unit = ''
+      yiliman.office = ''
+    } else {
+      console.log('准备数据')
+      let list = this.$store.state.yilijobdatalist.yilijobdatalist
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          yiliman.name = item.name
+          yiliman.relation = item.relation
+          yiliman.phone = item.phone
+          yiliman.unit = item.unit
+          yiliman.office = item.office
+        }
+      })
     }
   }
 }

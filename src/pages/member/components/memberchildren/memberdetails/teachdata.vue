@@ -1,6 +1,6 @@
 <template>
 <div>
-   <div v-show="teach_control.Menu">
+   <div >
      <div class="Member-nav">
        <router-link to="/member">
          <div class="Member-back">
@@ -14,37 +14,29 @@
      </div>
      <ul class="job_ul">
        <li class="job_li">
-         <div class="job_left">
+         <div class="job_left" :class="{ color_error: TeachData.StartTimeActive }">
            *开始时间
          </div>
          <div class="job_right"  @click="setDate">
-            {{JobData.StartTime}}
+            {{TeachData.StartTime}}
             <span class="iconfont job_time">&#xe644;</span>
          </div>
        </li>
        <li class="job_li">
-         <div class="job_left">
+         <div class="job_left" :class="{ color_error: TeachData.EndTimeActive}">
            *结束时间
          </div>
          <div class="job_right"  @click="setDate2">
-            {{JobData.EndTime}}
+            {{TeachData.EndTime}}
             <span class="iconfont job_time">&#xe644;</span>
          </div>
        </li>
        <li class="job_li">
-         <div class="job_left">
+         <div class="job_left" :class="{ color_error: TeachData.unitAcitve }">
            *学校名称
          </div>
          <div class="job_right">
-             <input type="text" placeholder="请在此处输入"  :value="JobData.unit"/>
-         </div>
-       </li>
-       <li class="job_li">
-         <div class="job_left" >
-           *学校类型
-         </div>
-         <div class="job_right"  @click="User_Selectschoolsk">
-             {{JobData.unitType}}
+             <input type="text" placeholder="请在此处输入"  v-model="TeachData.unit"/>
          </div>
        </li>
        <li class="job_li">
@@ -52,55 +44,72 @@
            *学历
          </div>
          <div class="job_right" @click="User_Selecteducationsk">
-             {{JobData.education}}
+             {{TeachData.education}}
          </div>
        </li>
        <li class="job_li">
+         <div class="job_left">
+           *学校类型
+         </div>
+         <div class="job_right" v-show="!user_educationselect" >
+             {{TeachData.unitType}}
+         </div>
+         <div class="job_right" v-show="user_educationselect"  @click="User_Selectschoolsk">
+             {{TeachData.unitType}}
+         </div>
+       </li>
+       <li class="job_li" v-show="ProfessionType_select">
          <div class="job_left">
            专业类别
          </div>
-         <div class="job_right" @click="User_SelectProfessionsk">
-             {{JobData.ProfessionType}}
+        <!--  <div class="job_right" v-show="!ProfessionType_select">
+             {{TeachData.ProfessionType}}
+         </div> -->
+         <div class="job_right" @click="User_SelectProfessionsk" >
+             {{TeachData.ProfessionType}}
          </div>
        </li>
-       <li class="job_li">
-         <div class="job_left">
+       <li class="job_li" v-show="Profession_selectchu">
+         <div class="job_left" :class="{ color_error: TeachData.ProfessionAcitve }">
            专业
          </div>
          <div class="job_right">
-              <input type="text" placeholder="请在此处输入"  :value="JobData.Profession"/>
+              <input type="text" placeholder="请在此处输入"  v-model="TeachData.Profession"/>
          </div>
        </li>
        <li class="job_li">
          <div class="job_left">
            教育形式
          </div>
-         <div class="job_right" @click="User_SelectTeachModussk">
-             {{JobData.TeachModus}}
+         <div class="job_right" v-show="!TeachModus_select">
+             {{TeachData.TeachModus}}
+         </div>
+         <div class="job_right" @click="User_SelectTeachModussk" v-show="TeachModus_select">
+             {{TeachData.TeachModus}}
          </div>
        </li>
-       <li class="job_li">
-         <div class="job_left">
-           学历证书编号
+       <li class="job_li" v-show="CertificateNumber_select">
+         <div class="job_left" :class="{ color_error: TeachData.CertificateNumberAcitve}">
+           *学历证书编号
          </div>
          <div class="job_right">
-             <input type="text" placeholder="请在此处输入"  :value="JobData.CertificateNumber"/>
+             <input type="text" placeholder="请在此处输入"  v-model="TeachData.CertificateNumber"/>
          </div>
        </li>
-       <li class="job_li">
-         <div class="job_left">
-           学位证书编号
+       <li class="job_li" v-show="DegreeNumber_select">
+         <div class="job_left" :class="{ color_error: TeachData.DegreeNumberAcitve}">
+           *学位证书编号
          </div>
          <div class="job_right">
-              <input type="text" placeholder="请在此处输入"  :value="JobData.DegreeNumber"/>
+              <input type="text" placeholder="请在此处输入"  v-model="TeachData.DegreeNumber"/>
          </div>
        </li>
      </ul>
      <p class="job_title">备注</p>
-     <textarea class="job_memark" placeholder="请在此处输入" :value="JobData.JobRemarks"></textarea>
+     <textarea class="job_memark" placeholder="请在此处输入" v-model="TeachData.Remarks"></textarea>
      <div class="job_keep">
-        <mt-button type="primary" size="normal" class="job_btn" @click="Job_keep">保存</mt-button>
-        <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+        <mt-button type="primary" size="normal" class="job_btn" @click="teachData_keep">保存</mt-button>
+        <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="teachData_remove">删除</mt-button>
      </div>
     </div>
     <mt-popup
@@ -174,7 +183,7 @@
  </div>
 </template>
 <script>
-
+import { MessageBox } from 'mint-ui'
 export default {
   name: 'teachdata',
   data () {
@@ -183,28 +192,33 @@ export default {
       educationVisible: false,
       ProfessionVisible: false,
       TeachModusVisible: false,
-      teach_control: {
-        school: false,
-        education: false,
-        profession: false,
-        mouds: false,
-        Menu: true
-      },
+      user_educationselect: true,
+      ProfessionType_select: true,
+      TeachModus_select: true,
+      CertificateNumber_select: true,
+      DegreeNumber_select: true,
+      Profession_selectchu: true,
       MemberTitle: {
         back: '返回',
         title: '教育经历'
       },
-      JobData: {
+      TeachData: {
         StartTime: '2010-01-09',
+        StartTimeActive: false,
         EndTime: '2020-09-11',
-        unit: '北京大学',
-        unitType: '211高等学校',
+        EndTimeActive: false,
+        unit: '',
+        unitAcitve: false,
+        unitType: '普通高等学校',
         education: '本科',
-        ProfessionType: '管理学',
-        Profession: '人力资源管理',
+        ProfessionType: '哲学',
+        Profession: '',
+        ProfessionAcitve: false,
         TeachModus: '全日制',
-        CertificateNumber: '104765201605701784',
-        DegreeNumber: '104765201605701784',
+        CertificateNumber: '',
+        CertificateNumberAcitve: false,
+        DegreeNumber: '',
+        DegreeNumberAcitve: false,
         Remarks: '',
         unitType_set: '',
         education_set: '',
@@ -221,14 +235,14 @@ export default {
       educationslots: [
         {
           flex: 1,
-          values: ['初中', '高中', '中技', '中专', '大专', '大学', '硕士研究生', '博士研究生', '博士后'],
+          values: ['初中及以下', '高中', '职业高中', '中技', '中专', '大专', '大学', '硕士研究生', '博士研究生', '博士后'],
           textAlign: 'center'
         }
       ],
       Professionslots: [
         {
           flex: 1,
-          values: ['哲学', '经济学', '法学', '教育学', '文学', '艺术学', '历史学', '理学', '工学', '农学', '医学', '管理学', '军事学', '无'],
+          values: ['哲学', '经济学', '法学', '教育学', '文学', '艺术学', '历史学', '理学', '工学', '农学', '医学', '管理学', '军事学'],
           textAlign: 'center'
         }
       ],
@@ -246,7 +260,7 @@ export default {
       this.$picker.show({
         type: 'datePicker',
         onOk: (date) => {
-          this.JobData.StartTime = date
+          this.TeachData.StartTime = date
         }
       })
     },
@@ -254,22 +268,115 @@ export default {
       this.$picker.show({
         type: 'datePicker',
         onOk: (e) => {
-          this.JobData.EndTime = e
+          this.TeachData.EndTime = e
         }
       })
     },
-    Job_keep () {
-      console.log('我是保存按钮')
+    teachData_keep () {
+      const TeachData = this.TeachData
+      const ID = this.$route.query.name
+      let msgSelected = true
+      if (TeachData.StartTime > TeachData.EndTime) {
+        TeachData.StartTimeActive = true
+        TeachData.EndTimeActive = true
+        msgSelected = false
+      } else {
+        TeachData.StartTimeActive = false
+        TeachData.EndTimeActive = false
+      }
+      if (TeachData.unit === '') {
+        TeachData.unitAcitve = true
+        msgSelected = false
+      } else {
+        TeachData.unitAcitve = false
+      }
+      if (TeachData.education !== '初中及以下') {
+        if (TeachData.Profession === '') {
+          TeachData.ProfessionAcitve = true
+          msgSelected = false
+        } else {
+          TeachData.ProfessionAcitve = false
+        }
+      }
+      if (this.user_educationselect) {
+        if (TeachData.education === '大专') {
+          if (TeachData.CertificateNumber === '') {
+            TeachData.CertificateNumberAcitve = true
+            msgSelected = false
+          } else {
+            TeachData.CertificateNumberAcitve = false
+          }
+        } else {
+          if (TeachData.CertificateNumber === '') {
+            TeachData.CertificateNumberAcitve = true
+            msgSelected = false
+          } else {
+            TeachData.CertificateNumberAcitve = false
+          }
+          if (TeachData.DegreeNumber === '') {
+            TeachData.DegreeNumberAcitve = true
+            msgSelected = false
+          } else {
+            TeachData.DegreeNumberAcitve = false
+          }
+        }
+      }
+      if (msgSelected) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.Teachbg.TeachbgdataList.length + 1
+
+          let addmsg = {
+            id: listlength,
+            StartTime: TeachData.StartTime,
+            EndTime: TeachData.EndTime,
+            unit: TeachData.unit,
+            unitType: TeachData.unitType,
+            education: TeachData.education,
+            ProfessionType: TeachData.ProfessionType,
+            Profession: TeachData.Profession,
+            TeachModus: TeachData.TeachModus,
+            CertificateNumber: TeachData.CertificateNumber,
+            DegreeNumber: TeachData.DegreeNumber,
+            Remarks: TeachData.Remarks
+          }
+          this.$store.commit('TeachbgAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            StartTime: TeachData.StartTime,
+            EndTime: TeachData.EndTime,
+            unit: TeachData.unit,
+            unitType: TeachData.unitType,
+            education: TeachData.education,
+            ProfessionType: TeachData.ProfessionType,
+            Profession: TeachData.Profession,
+            TeachModus: TeachData.TeachModus,
+            CertificateNumber: TeachData.CertificateNumber,
+            DegreeNumber: TeachData.DegreeNumber,
+            Remarks: TeachData.Remarks
+          }
+          this.$store.commit('TeachbgWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
     },
     User_Selectschoolsk () {
       this.schoolVisible = !this.schoolVisible
     },
     User_SelectschoolSure () {
-      this.JobData.unitType = this.JobData.unitType_set
+      this.TeachData.unitType = this.TeachData.unitType_set
       this.schoolVisible = !this.schoolVisible
     },
     onValuesschoolChange (picker, values) {
-      this.JobData.unitType_set = values[0]
+      this.TeachData.unitType_set = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0])
       }
@@ -278,11 +385,43 @@ export default {
       this.educationVisible = !this.educationVisible
     },
     User_SelecteducationSure () {
-      this.JobData.education = this.JobData.education_set
+      this.TeachData.education = this.TeachData.education_set
       this.educationVisible = !this.educationVisible
+      let education = this.TeachData.education
+      if (education === '初中及以下' || education === '高中' || education === '中技' || education === '中专' ||
+          education === '职业高中' || education === '大专') {
+        this.user_educationselect = false
+        this.ProfessionType_select = false
+        this.TeachModus_select = false
+        this.DegreeNumber_select = false
+        this.TeachData.unitType = '其他'
+        this.TeachData.ProfessionType = ''
+        this.TeachData.TeachModus = '全日制'
+        this.TeachData.DegreeNumber = ''
+        this.TeachData.CertificateNumber = ''
+      } else {
+        this.user_educationselect = true
+        this.ProfessionType_select = true
+        this.TeachModus_select = true
+        this.DegreeNumber_select = true
+        this.TeachData.unitType = '普通高等学校'
+        this.TeachData.ProfessionType = '哲学'
+        this.TeachData.TeachModus = '全日制'
+      }
+      if (education === '初中及以下') {
+        this.Profession_selectchu = false
+        this.TeachData.Profession = ''
+      } else {
+        this.Profession_selectchu = true
+      }
+      if (education === '初中及以下' || education === '高中' || education === '职业高中') {
+        this.CertificateNumber_select = false
+      } else {
+        this.CertificateNumber_select = true
+      }
     },
     onValueseducationChange (picker, values) {
-      this.JobData.education_set = values[0]
+      this.TeachData.education_set = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0])
       }
@@ -291,11 +430,11 @@ export default {
       this.ProfessionVisible = !this.ProfessionVisible
     },
     User_SelecteProfessionSure () {
-      this.JobData.ProfessionType = this.JobData.ProfessionType_set
+      this.TeachData.ProfessionType = this.TeachData.ProfessionType_set
       this.ProfessionVisible = !this.ProfessionVisible
     },
     onValuesProfessionChange (picker, values) {
-      this.JobData.ProfessionType_set = values[0]
+      this.TeachData.ProfessionType_set = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0])
       }
@@ -304,13 +443,111 @@ export default {
       this.TeachModusVisible = !this.TeachModusVisible
     },
     User_SelecteTeachModusSure () {
-      this.JobData.TeachModus = this.JobData.TeachModus_set
+      this.TeachData.TeachModus = this.TeachData.TeachModus_set
       this.TeachModusVisible = !this.TeachModusVisible
     },
     onValuesTeachModusChange (picker, values) {
-      this.JobData.TeachModus_set = values[0]
+      this.TeachData.TeachModus_set = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0])
+      }
+    },
+    teachData_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('TeachbgRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      }
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    const TeachData = this.TeachData
+
+    TeachData.StartTimeActive = false
+    TeachData.EndTimeActive = false
+    TeachData.unitAcitve = false
+    TeachData.ProfessionAcitve = false
+    TeachData.CertificateNumberAcitve = false
+    this.schoolVisible = false
+    this.educationVisible = false
+    this.ProfessionVisible = false
+    this.TeachModusVisible = false
+    this.user_educationselect = true
+    this.ProfessionType_select = true
+    this.TeachModus_select = true
+    this.CertificateNumber_select = true
+    this.DegreeNumber_select = true
+    this.Profession_selectchu = true
+    if (ID === undefined) {
+      console.log('创建新模板')
+      TeachData.StartTime = '2010-01-09'
+      TeachData.EndTime = '2020-09-11'
+      TeachData.unit = ''
+      TeachData.unitType = '普通高等学校'
+      TeachData.education = '本科'
+      TeachData.ProfessionType = '哲学'
+      TeachData.Profession = ''
+      TeachData.TeachModus = '全日制'
+      TeachData.CertificateNumber = ''
+      TeachData.Remarks = ''
+    } else {
+      let list = this.$store.state.Teachbg.TeachbgdataList
+      console.log('准备数据')
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          TeachData.StartTime = item.StartTime
+          TeachData.EndTime = item.EndTime
+          TeachData.unit = item.unit
+          TeachData.unitType = item.unitType
+          TeachData.education = item.education
+          TeachData.ProfessionType = item.ProfessionType
+          TeachData.Profession = item.Profession
+          TeachData.TeachModus = item.TeachModus
+          TeachData.CertificateNumber = item.CertificateNumber
+          TeachData.DegreeNumber = item.DegreeNumber
+          TeachData.Remarks = item.Remarks
+        }
+      })
+      let education = this.TeachData.education
+      if (education === '初中及以下' || education === '高中' || education === '中技' || education === '中专' ||
+          education === '职业高中' || education === '大专') {
+        this.user_educationselect = false
+        this.ProfessionType_select = false
+        this.TeachModus_select = false
+        this.DegreeNumber_select = false
+        this.TeachData.unitType = '其他'
+        this.TeachData.ProfessionType = ''
+        this.TeachData.TeachModus = '全日制'
+        this.TeachData.DegreeNumber = ''
+        this.TeachData.CertificateNumber = ''
+      } else {
+        this.user_educationselect = true
+        this.ProfessionType_select = true
+        this.TeachModus_select = true
+        this.DegreeNumber_select = true
+        this.TeachData.unitType = '普通高等学校'
+        this.TeachData.ProfessionType = '哲学'
+        this.TeachData.TeachModus = '全日制'
+      }
+      if (education === '初中及以下') {
+        this.Profession_selectchu = false
+        this.TeachData.Profession = ''
+      } else {
+        this.Profession_selectchu = true
+      }
+      if (education === '初中及以下' || education === '高中' || education === '职业高中') {
+        this.CertificateNumber_select = false
+      } else {
+        this.CertificateNumber_select = true
       }
     }
   }
@@ -369,10 +606,6 @@ export default {
  display:flex
  justify-content:space-around
  align-items:center
- position:fixed
- left:0
- right:0
- bottom:0
  .job_btn
    padding: 0 0.8rem
    text-align:center

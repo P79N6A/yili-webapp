@@ -13,7 +13,7 @@
    </div>
    <ul class="job_ul">
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.StartTimeAcitve }">
          *开始时间
        </div>
        <div class="job_right"  @click="setDate">
@@ -22,7 +22,7 @@
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.EndTimeAcitve }">
          *结束时间
        </div>
        <div class="job_right"  @click="setDate2">
@@ -31,47 +31,50 @@
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.JobUnitAcitve }">
          *工作单位
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入"  :value="JobData.JobUnit"/>
+           <input type="text" placeholder="请在此处输入"  v-model="JobData.JobUnit"/>
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.JobOfficeAcitve }">
          *职务
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobOffice"/>
+           <input type="text" placeholder="请在此处输入" v-model="JobData.JobOffice"/>
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.JobWitnessAcitve}">
          证明人
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobWitness"/>
+           <input type="text" placeholder="请在此处输入" v-model="JobData.JobWitness"/>
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: JobData.JobWitnessPhoneAcitve}">
          联系电话
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="JobData.JobWitnessPhone"/>
+           <input type="number" placeholder="请在此处输入" v-model="JobData.JobWitnessPhone"/>
        </div>
      </li>
    </ul>
    <p class="job_title">备注</p>
-   <textarea class="job_memark" placeholder="请在此处输入" :value="JobData.JobRemarks"></textarea>
-   <div class="job_keep">
+   <textarea class="job_memark" placeholder="请在此处输入" v-model="JobData.JobRemarks"></textarea>
+   <div class="job_keep" v-show="isOriginHei">
       <mt-button type="primary" size="normal" class="job_btn" @click="Job_keep">保存</mt-button>
-      <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+      <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="Job_remove">删除</mt-button>
    </div>
  </div>
 </template>
 <script>
+import { MessageBox } from 'mint-ui'
+import global_ from '@/pages/Global/global'
+
 export default {
   name: 'Jobdata',
   data () {
@@ -82,13 +85,22 @@ export default {
       },
       JobData: {
         StartTime: '2010-01-09',
+        StartTimeAcitve: false,
         EndTime: '2020-09-11',
-        JobUnit: '伊利集团商学院',
-        JobOffice: '销售经理',
-        JobWitness: '李小明',
-        JobWitnessPhone: 18792023874,
+        EndTimeAcitve: false,
+        JobUnit: '',
+        JobUnitAcitve: false,
+        JobOffice: '',
+        JobOfficeAcitve: false,
+        JobWitness: '',
+        JobWitnessAcitve: false,
+        JobWitnessPhone: '',
+        JobWitnessPhoneAcitve: false,
         JobRemarks: ''
-      }
+      },
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight,
+      originHeight: document.documentElement.clientHeight
     }
   },
   methods: {
@@ -109,14 +121,155 @@ export default {
       })
     },
     Job_keep () {
-      let name = this.$route.query.name
-      console.log(name)
+      let jobdata = this.JobData
+      const reg = global_.userPhone
+      const ID = this.$route.query.name
+      let msgActive = true
+      // let name = this.$route.query.name
+      // console.log(name)
+      if (jobdata.StartTime > jobdata.EndTime) {
+        jobdata.StartTimeAcitve = true
+        jobdata.EndTimeAcitve = true
+        msgActive = false
+      } else {
+        jobdata.StartTimeAcitve = false
+        jobdata.EndTimeAcitve = false
+      }
+      if (jobdata.JobUnit === '') {
+        jobdata.JobUnitAcitve = true
+        msgActive = false
+      } else {
+        jobdata.JobUnitAcitve = false
+      }
+      if (jobdata.JobOffice === '') {
+        jobdata.JobOfficeAcitve = true
+        msgActive = false
+      } else {
+        jobdata.JobOfficeAcitve = false
+      }
+      if (jobdata.JobWitnessPhone !== '' && jobdata.JobWitness === '') {
+        jobdata.JobWitnessAcitve = true
+        msgActive = false
+      } else {
+        jobdata.JobWitnessAcitve = false
+      }
+      if (jobdata.JobWitnessPhone !== '') {
+        let phoneone = jobdata.JobWitnessPhone.substring(0, 1)
+        if (phoneone === '1') {
+          if (!reg.test(jobdata.JobWitnessPhone)) {
+            jobdata.JobWitnessPhoneAcitve = true
+            msgActive = false
+          } else {
+            jobdata.JobWitnessPhoneAcitve = false
+          }
+        } else {
+          jobdata.JobWitnessPhoneAcitve = false
+        }
+      }
+      if (msgActive) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.jobskill.jobdataList.length + 1
+          let addmsg = {
+            id: listlength,
+            StartTime: jobdata.StartTime,
+            EndTime: jobdata.EndTime,
+            unit: jobdata.JobUnit,
+            office: jobdata.JobOffice,
+            witness: jobdata.JobWitness,
+            witness_phone: jobdata.JobWitnessPhone,
+            Remarks: jobdata.JobRemarks
+          }
+          this.$store.commit('jobAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            StartTime: jobdata.StartTime,
+            EndTime: jobdata.EndTime,
+            unit: jobdata.JobUnit,
+            office: jobdata.JobOffice,
+            witness: jobdata.JobWitness,
+            witness_phone: jobdata.JobWitnessPhone,
+            Remarks: jobdata.JobRemarks
+          }
+          this.$store.commit('jobWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
+    },
+    Job_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('jobRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      }
     }
   },
   mounted () {
-    console.log('是否被调用')
-    this.JobData.JobWitness = this.$route.query.name
-    console.log(this.JobData.JobWitness)
+    let self = this
+    window.onresize = function () {
+      return (function () {
+        self.screenHeight = document.documentElement.clientHeight
+      })()
+    }
+  },
+  watch: {
+    screenHeight (val) {
+      if (this.originHeight > val) {
+        this.isOriginHei = false
+      } else {
+        this.isOriginHei = true
+      }
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    const JobData = this.JobData
+    JobData.JobWitnessPhoneAcitve = false
+    JobData.EndTimeAcitve = false
+    JobData.JobUnitAcitve = false
+    JobData.JobOfficeAcitve = false
+    JobData.JobWitnessAcitve = false
+    if (ID === undefined) {
+      console.log('初始化模板')
+      JobData.StartTime = '2010-01-01'
+      JobData.StartTimeAcitve = false
+      JobData.EndTime = '2020-01-01'
+      JobData.JobUnit = ''
+      JobData.JobOffice = ''
+      JobData.JobWitness = ''
+      JobData.JobWitnessPhone = ''
+      JobData.JobRemarks = ''
+    } else {
+      let list = this.$store.state.jobskill.jobdataList
+      console.log('准备数据')
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          JobData.StartTime = item.StartTime
+          JobData.EndTime = item.EndTime
+          JobData.JobUnit = item.unit
+          JobData.JobOffice = item.office
+          JobData.JobWitness = item.witness
+          JobData.JobWitnessPhone = item.witness_phone
+          JobData.JobRemarks = item.Remarks
+        }
+      })
+    }
   }
 }
 </script>

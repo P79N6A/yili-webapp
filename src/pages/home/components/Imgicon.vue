@@ -1,11 +1,12 @@
 <template>
  <div>
      <div class="img-container">
-       <img :src="this.imgUrl" class="img-content" alt="" />
+       <img :src="imgUrl" class="img-content" alt="" />
      </div>
  </div>
 </template>
 <script>
+
 export default {
   name: 'HomeIcon',
   data () {

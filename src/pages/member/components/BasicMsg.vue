@@ -53,13 +53,13 @@
              <span class="iconfont Basiciconfont-time">&#xe644;</span>
             </div>
         </li>
-        <li class="Basic-li">
+      <!--   <li class="Basic-li">
             <div class="Basicmsg-left" :class="{ color_error: user.jobsTimeAcitve}">参加工作时间</div>
             <div class="Basicmsg-container" @click="setDate2">
              {{user.jobsTime}}
              <span class="iconfont Basiciconfont-time">&#xe644;</span>
             </div>
-        </li>
+        </li> -->
         <li class="Basic-li">
             <div class="Basicmsgicon-left">政治面貌</div>
             <div class="Basicmsgicon-container" @click="User_SelectPoliticalsk">{{user_Political}}</div>
@@ -113,19 +113,22 @@
                 <span class="iconfont BasicIconbg" >&#xe603;</span>
             </div> -->
         </li>
-        <li class="Basic-li">
+<!--         <li class="Basic-li">
             <div class="Basicmsg-left">参保地</div>
             <div class="Basicmsg-container">
-                <input type="text" v-model="user.Insured" placeholder="请在此处参保地址"/>
+                <input type="text" v-model="user.Insured" placeholder="请在此处输入参保地址"/>
             </div>
-        </li>
-        <li class="Basic-li">
-            <div class="Basicmsgicon-left">单位发薪周期</div>
+        </li> -->
+      <!--   <li class="Basic-li">
+            <div class="Basicmsgicon-left">原发薪周期</div>
             <div class="Basicmsgicon-container" @click="User_SelectWagesk">{{user_Wage}}</div>
-        <!--     <div class="Basicmsgicon-right" @click="User_SelectWagesk">
-                <span class="iconfont BasicIconbg" >&#xe603;</span>
-            </div> -->
-        </li>
+        </li> -->
+  <!--       <li class="Basic-li">
+            <div class="Basicmsgicon-left">预计停保时间</div>
+            <div class="Basicmsg-container">
+                <input type="text" v-model="user.StopInsured" placeholder="请在此处输入停保时间"/>
+            </div>
+        </li> -->
         <li class="Basic-li">
             <div class="Basicmsgicon-left">是否独生子女</div>
             <div class="Basicmsgicon-container" @click="User_SelectChildsk">{{user_child}}</div>
@@ -436,6 +439,7 @@ export default {
         savor: '',
         Specialty: '',
         Insured: '',
+        StopInsured: '',
         HomeTownPlace: '北京市 北京市 东城区',
         Birthplace: '北京市 北京市 东城区',
         Accountplace: '北京市 北京市 东城区',
@@ -725,7 +729,6 @@ export default {
       }
       let thisValue = e.currentTarget.value
       let VueThis = this
-      console.log(this)
       this.user.ID = thisValue
       this.user.testID = VueThis.$options.methods.ChinaIdChecker(thisValue)
       // this.user.testID = global_.ChinaIdChecker(thisValue)
@@ -952,6 +955,7 @@ export default {
     keep_usermsg () {
       const user = this.user
       const reg = global_.AddressReg
+      reg.lastIndex = 0
       let msgselect = true
       if (user.Name === '') {
         user.NameAcitve = true
@@ -967,14 +971,6 @@ export default {
           user.IDAcitve = false
         }
       }
-      if (user.jobsTime < user.BornTime) {
-        user.BornTimeAcitve = true
-        user.jobsTimeAcitve = true
-        msgselect = false
-      } else {
-        user.BornTimeAcitve = false
-        user.jobsTimeAcitve = false
-      }
       if (user.Height > 200 || user.Height < 140) {
         user.HeightAcitve = true
         msgselect = false
@@ -982,25 +978,31 @@ export default {
         user.HeightAcitve = false
       }
       if (!reg.test(user.Accountplaceinput)) {
+        reg.lastIndex = 0
         user.AccountplaceinputAcitve = true
         msgselect = false
       } else {
+        reg.lastIndex = 0
         user.AccountplaceinputAcitve = false
       }
       if (!reg.test(user.FamilyPlaceinput)) {
+        reg.lastIndex = 0
         user.FamilyPlaceinputAcitve = true
         msgselect = false
       } else {
+        reg.lastIndex = 0
         user.FamilyPlaceinputAcitve = false
       }
       if (!reg.test(user.NowPlaceinput)) {
+        reg.lastIndex = 0
         user.NowPlaceinputAcitve = true
         msgselect = false
       } else {
+        reg.lastIndex = 0
         user.NowPlaceinputAcitve = false
       }
       if (msgselect) {
-        MessageBox('信息正确', '信息修改成功')
+        MessageBox('信息正确', '信息保存成功')
       } else {
         MessageBox('提交信息有误', '有误信息已经标红,请修改')
       }
@@ -1104,6 +1106,4 @@ export default {
     height: 40px
     line-height: 40px
     font-size: 16px
-.color_error
-  color: red !important
 </style>

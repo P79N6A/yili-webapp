@@ -13,7 +13,7 @@
        </div>
        <ul class="job_ul">
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.relationActive}">
              与本人关系
            </div>
            <div class="job_right" @click="User_Selectsk">
@@ -21,15 +21,15 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.nameActive}">
              姓名
            </div>
            <div class="job_right">
-               <input type="text" placeholder="请在此处输入" :value="familymember.name"/>
+               <input type="text" placeholder="请在此处输入" v-model="familymember.name"/>
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.sexActive}">
              性别
            </div>
            <div class="job_right" @click="User_Selectsexsk">
@@ -45,27 +45,19 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
-             联系方式
-           </div>
-           <div class="job_right">
-               <input type="text" placeholder="请在此处输入" :value="familymember.contactphone"/>
-           </div>
-         </li>
-         <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.unitActive}">
              工作单位/学习院校
            </div>
            <div class="job_right">
-               <input type="text" placeholder="请在此处输入" :value="familymember.unit"/>
+               <input type="text" placeholder="请在此处输入"  v-model="familymember.unit"/>
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.officeActive}">
              职位/身份
            </div>
            <div class="job_right">
-               <input type="text" placeholder="请在此处输入" :value="familymember.office"/>
+               <input type="text" placeholder="请在此处输入" v-model="familymember.office"/>
            </div>
          </li>
          <li class="job_li">
@@ -78,15 +70,15 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.inaddressActive}">
              详细地址
            </div>
            <div class="job_right">
-               <input type="text" placeholder="如道路、门牌号、小区等" :value="familymember.inaddress"/>
+               <input type="text" placeholder="如道路、门牌号、小区等" v-model="familymember.inaddress"/>
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.crashkActive}">
              紧急联系人
            </div>
            <div class="job_right" @click="User_Selectcrashsk">
@@ -94,7 +86,15 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left" >
+           <div class="job_left" :class="{ color_error: familymember.contactphoneActive}">
+             联系方式
+           </div>
+           <div class="job_right">
+               <input type="number" placeholder="请在此处输入" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode)))' v-model="familymember.contactphone"/>
+           </div>
+         </li>
+         <li class="job_li">
+           <div class="job_left" :class="{ color_error: familymember.yilijobActive}">
              是否在伊利工作
            </div>
            <div class="job_right" @click="User_Selectyilisk">
@@ -102,11 +102,11 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: familymember.StaffIDActive}">
              家庭成员员工ID
            </div>
            <div class="job_right">
-               <input type="text" placeholder="请在此处输入" :value="familymember.StaffID"/>
+               <input type="text" placeholder="请在此处输入" v-model="familymember.StaffID"/>
            </div>
          </li>
          <li class="job_li">
@@ -119,8 +119,8 @@
          </li>
        </ul>
        <div class="job_keep">
-          <mt-button type="primary" size="normal" class="job_btn">保存</mt-button>
-          <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+          <mt-button type="primary" size="normal" class="job_btn" @click="familymsg_keep">保存</mt-button>
+          <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="familymsg_remove">删除</mt-button>
        </div>
        <mt-popup
           v-model="parentVisible"
@@ -223,6 +223,8 @@
 import Vue from 'vue'
 import areaData from '@/assets/js/area'
 import AwesomePicker from 'vue-awesome-picker'
+import { MessageBox } from 'mint-ui'
+import global_ from '@/pages/Global/global'
 Vue.use(AwesomePicker)
 
 export default {
@@ -240,17 +242,27 @@ export default {
       },
       familymember: {
         relation: '父',
+        relationActive: false,
         name: '张大牛',
+        nameActive: false,
         sex: '男',
+        sexActive: false,
         birthday: '1980-10-10',
         contactphone: '13701232834',
+        contactphoneActive: false,
         unit: '伊利商学院',
+        unitActive: false,
         office: '主管',
+        officeActive: false,
         address: '北京市 直辖区 东城区',
         inaddress: '伊利商学院职工小区',
+        inaddressActive: false,
         crash: '是',
+        crashkActive: false,
         yilijob: '是',
+        yilijobActive: false,
         StaffID: '140XXXXXXXXX',
+        StaffIDActive: false,
         matejob: '是',
         relation_set: '',
         sex_set: '',
@@ -384,6 +396,210 @@ export default {
       // console.log('籍贯id是否正确' + JSON.stringify(this.picker4))
       let objarea = JSON.parse(this.value)
       this.familymember.address = objarea[0].value + ' ' + objarea[1].value + ' ' + objarea[2].value
+    },
+    familymsg_keep () {
+      let message = true
+      const familymember = this.familymember
+      const usersexvalue = '男'
+      const reg = global_.userPhone
+      const addressreg = global_.AddressReg
+      const tellreg = global_.usertellPhone
+      const ID = this.$route.query.name
+      if (familymember.name === '') {
+        familymember.nameActive = true
+        message = false
+      } else {
+        familymember.nameActive = false
+      }
+      if (familymember.relation === '配偶' && familymember.sex === usersexvalue) {
+        familymember.relationActive = true
+        familymember.sexActive = true
+        message = false
+      } else {
+        familymember.relationActive = false
+        familymember.sexActive = false
+      }
+      if (familymember.unit === '') {
+        familymember.unitActive = true
+        message = false
+      } else {
+        familymember.unitActive = false
+      }
+      if (familymember.office === '') {
+        familymember.officeActive = true
+        message = false
+      } else {
+        familymember.officeActive = false
+      }
+      if (!addressreg.test(familymember.inaddress)) {
+        addressreg.lastIndex = 0
+        familymember.inaddressActive = true
+        message = false
+      } else {
+        addressreg.lastIndex = 0
+        familymember.inaddressActive = false
+      }
+      if (familymember.crash === '是') {
+        if (familymember.contactphone === '') {
+          familymember.contactphoneActive = true
+          message = false
+        } else if (familymember.contactphone !== '') {
+          let phoneone = familymember.contactphone.substring(0, 1)
+          if (phoneone === '1') {
+            if (!reg.test(familymember.contactphone)) {
+              familymember.contactphoneActive = true
+              message = false
+            } else {
+              familymember.contactphoneActive = false
+            }
+          } else if (phoneone !== '1') {
+            if (!tellreg.test(familymember.contactphone)) {
+              familymember.contactphoneActive = true
+              message = false
+            } else {
+              familymember.contactphoneActive = false
+            }
+          }
+        }
+      }
+      if (familymember.yilijob === '是' && familymember.StaffID === '') {
+        familymember.StaffIDActive = true
+        message = false
+      } else if (familymember.yilijob === '是' && familymember.StaffID !== '') {
+        familymember.StaffIDActive = false
+      } else if (familymember.yilijob === '否') {
+        familymember.StaffIDActive = false
+      }
+      if (message) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.family.FamilyList.length + 1
+          let addmsg = {
+            id: listlength,
+            relation: familymember.relation,
+            name: familymember.name,
+            sex: familymember.sex,
+            BirthdayDate: familymember.birthday,
+            ContactPhone: familymember.contactphone,
+            unit: familymember.unit,
+            Identity: familymember.office,
+            address: familymember.address,
+            inaddress: familymember.inaddress,
+            urgent: familymember.crash,
+            yilijob: familymember.yilijob,
+            StaffID: familymember.StaffID,
+            spousejob: familymember.matejob
+          }
+          this.$store.commit('FamilyAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            relation: familymember.relation,
+            name: familymember.name,
+            sex: familymember.sex,
+            BirthdayDate: familymember.birthday,
+            ContactPhone: familymember.contactphone,
+            unit: familymember.unit,
+            Identity: familymember.office,
+            address: familymember.address,
+            inaddress: familymember.inaddress,
+            urgent: familymember.crash,
+            yilijob: familymember.yilijob,
+            StaffID: familymember.StaffID,
+            spousejob: familymember.matejob
+          }
+          this.$store.commit('FamilyWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
+    },
+    familymsg_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('FamilyRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      }
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    if (ID === undefined) {
+      console.log('新建模板')
+      const familymember = this.familymember
+      familymember.relation = '父'
+      familymember.relationActive = false
+      familymember.name = ''
+      familymember.nameActive = false
+      familymember.sex = '男'
+      familymember.sexActive = false
+      familymember.birthday = '1980-10-10'
+      familymember.contactphone = ''
+      familymember.contactphoneActive = false
+      familymember.unit = ''
+      familymember.unitActive = false
+      familymember.office = ''
+      familymember.officeActive = false
+      familymember.address = '北京市 直辖区 东城区'
+      familymember.inaddress = ''
+      familymember.inaddressActive = false
+      familymember.crash = '是'
+      familymember.crashkActive = false
+      familymember.yilijob = '是'
+      familymember.yilijobActive = false
+      familymember.StaffID = ''
+      familymember.StaffIDActive = false
+      familymember.matejob = '是'
+      familymember.relation_set = '配偶'
+      familymember.sex_set = '男'
+      familymember.crash_set = '是'
+      familymember.yilijob_set = '是'
+      familymember.matejob_set = '是'
+    } else {
+      console.log('准备数据')
+      const familymember = this.familymember
+      let list = this.$store.state.family.FamilyList
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          familymember.relation = item.relation
+          familymember.name = item.name
+          familymember.sex = item.sex
+          familymember.BirthdayDate = item.BirthdayDate
+          familymember.contactphone = item.ContactPhone
+          familymember.unit = item.unit
+          familymember.office = item.Identity
+          familymember.address = item.address
+          familymember.inaddress = item.inaddress
+          familymember.crash = item.urgent
+          familymember.yilijob = item.yilijob
+          familymember.StaffID = item.StaffID
+          familymember.matejob = item.spousejob
+        }
+      })
+      familymember.relationActive = false
+      familymember.nameActive = false
+      familymember.sexActive = false
+      familymember.contactphoneActive = false
+      familymember.unitActive = false
+      familymember.officeActive = false
+      familymember.inaddressActive = false
+      familymember.crashkActive = false
+      familymember.yilijobActive = false
+      familymember.StaffIDActive = false
     }
   }
 }

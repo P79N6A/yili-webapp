@@ -13,7 +13,7 @@
    </div>
    <ul class="job_ul">
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: lgData.LanguageAcitve}">
          *语言
        </div>
        <div class="job_right" @click="User_lgSelectsk">
@@ -21,7 +21,7 @@
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: lgData.levelAcitve}">
          *等级证书
        </div>
        <div class="job_right" @click="User_lglevelSelectsk">
@@ -38,11 +38,11 @@
        </div>
      </li>
      <li class="job_li">
-       <div class="job_left">
+       <div class="job_left" :class="{ color_error: lgData.GradeAcitve}">
          总成绩
        </div>
        <div class="job_right">
-           <input type="text" placeholder="请在此处输入" :value="lgData.Grade"/>
+           <input type="number" placeholder="请在此处输入" onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode)))' v-model="lgData.Grade"/>
        </div>
      </li>
      <li class="job_li">
@@ -54,9 +54,9 @@
        </div>
      </li>
    </ul>
-   <div class="job_keep">
+   <div class="job_keep" v-show="isOriginHei">
       <mt-button type="primary" size="normal" class="job_btn" @click="lgdata_keep">保存</mt-button>
-      <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+      <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="lgdata_remove">删除</mt-button>
    </div>
    <mt-popup
     v-model="popupVisible"
@@ -112,6 +112,7 @@
  </div>
 </template>
 <script>
+import { MessageBox } from 'mint-ui'
 export default {
   name: 'lgleveldata',
   data () {
@@ -140,11 +141,14 @@ export default {
       },
       lgData: {
         Language: '',
+        LanguageAcitve: false,
         language_set: '',
         level: '',
         level_set: '',
+        levelAcitve: false,
         Time: '2010-01-09',
         Grade: '70',
+        GradeAcitve: false,
         skilled: '一般',
         skilled_set: ''
       },
@@ -155,7 +159,10 @@ export default {
         '4': ['法语专业4级', '法语专业8级', '法语公共4级', '法语专业8级', '其他'],
         '5': ['俄语4级', '俄语8级', '俄语3级', '俄语6级', '其他'],
         '6': ['韩语1级', '韩语2级', '韩语3级', '韩语4级', '韩语5级', '韩语6级', '其他']
-      }
+      },
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight,
+      originHeight: document.documentElement.clientHeight
     }
   },
   methods: {
@@ -215,21 +222,101 @@ export default {
       }
     },
     lgdata_keep () {
-      this.axios.post('http://10.60.138.214:8002/PSIGW/RESTListeningConnector/PSFT_HR/HPSAWESUMIT.v1', {
-        EOAWPRCS_ID: 'YL_SSC_AWE_031'
-      })
-        .then(function (response) {
-          console.log(response)
+      let Messaged = true
+      const lgData = this.lgData
+      const ID = this.$route.query.name
+      if (lgData.Language === '') {
+        lgData.LanguageAcitve = true
+        Messaged = false
+      } else {
+        lgData.LanguageAcitve = false
+      }
+      if (lgData.level === '') {
+        lgData.levelAcitve = true
+        Messaged = false
+      } else {
+        lgData.levelAcitve = false
+      }
+      if (lgData.Grade === '') {
+        lgData.GradeAcitve = true
+        Messaged = false
+      } else {
+        if (lgData.Grade <= 100 && lgData.Grade > 0) {
+          lgData.GradeAcitve = false
+        } else {
+          lgData.GradeAcitve = true
+          Messaged = false
+        }
+      }
+      if (Messaged) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.language.languagedatalist.length + 1
+          let addmsg = {
+            id: listlength,
+            language: lgData.Language,
+            level: lgData.level,
+            date: lgData.Time,
+            Grade: lgData.Grade,
+            skilled: lgData.skilled
+          }
+          this.$store.commit('languageAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            language: lgData.Language,
+            level: lgData.level,
+            date: lgData.Time,
+            Grade: lgData.Grade,
+            skilled: lgData.skilled
+          }
+          this.$store.commit('languageWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
+    },
+    lgdata_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
         })
-        .catch(function (error) {
-          console.log(error)
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('languageRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
         })
+        MessageBox('信息删除', '信息删除成功')
+      }
+    }
+  },
+  mounted () {
+    let self = this
+    window.onresize = function () {
+      return (function () {
+        self.screenHeight = document.documentElement.clientHeight
+      })()
     }
   },
   watch: {
     'lgData.Language' (item) {
       let lgname = parseInt(item)
       this.change_leveldata(lgname)
+    },
+    screenHeight (val) {
+      if (this.originHeight > val) {
+        this.isOriginHei = false
+      } else {
+        this.isOriginHei = true
+      }
     }
   },
   computed: {
@@ -242,6 +329,42 @@ export default {
         }
       ]
       return lglevelslots
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    if (ID === undefined) {
+      console.log('初始化模板')
+      this.lgData.Language = ''
+      this.lgData.LanguageAcitve = false
+      this.lgData.language_set = '1-英语'
+      this.lgData.level = ''
+      this.lgData.level_set = '英语4级'
+      this.lgData.levelAcitve = false
+      this.lgData.Time = '2010-01-01'
+      this.lgData.Grade = ''
+      this.lgData.GradeAcitve = false
+      this.lgData.skilled = '一般'
+      this.lgData.skilled_set = '一般'
+    } else {
+      console.log('准备数据')
+      let data = this
+      let list = this.$store.state.language.languagedatalist
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          data.lgData.level = item.level
+          data.lgData.Language = item.language
+          data.lgData.Time = item.date
+          data.lgData.Grade = item.Grade
+          data.lgData.skilled = item.skilled
+        }
+      })
+      this.lgData.LanguageAcitve = false
+      this.lgData.levelAcitve = false
+      this.lgData.GradeAcitve = false
+      this.lgData.language_set = '1-英语'
+      this.lgData.level_set = '英语4级'
+      this.lgData.skilled_set = '一般'
     }
   }
 }

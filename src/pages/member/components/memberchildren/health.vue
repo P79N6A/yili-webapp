@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-        <li class="family-li" v-for="item of HealthList" :key="item.id">
+        <li class="family-li" v-for="item of healthdatalist" :key="item.id">
             <div class="family-left">
               <ul>
                   <li class="familymenu">
@@ -38,21 +38,20 @@
                   </li>
               </ul>
             </div>
-             <div class="family-right" @click="To_familyDetails">
+             <div class="family-right" @click="To_familyDetails(item.id)">
                  <span class="iconfont family-img">&#xe601;</span>
              </div>
         </li>
     </ul>
-    <p class="job_add" >
+    <p class="job_add" @click="To_familyDetails()">
       <span class="iconfont job_addimg">&#xe608;</span>
     </p>
-    <div class="job_footer">
-      <mt-button type="primary" size="large">保存</mt-button>
-    </div>
   </div>
 </template>
 
 <script type="text/javascript">
+import { mapState } from 'vuex'
+
 export default {
   name: 'health',
   data () {
@@ -69,14 +68,22 @@ export default {
     }
   },
   methods: {
-    To_familyDetails () {
+    To_familyDetails (itemid) {
       this.$router.push({
         path: `/healthdata`,
         query: {
-          name: '哒哒哒'
+          name: itemid
         }
       })
+    },
+    keep () {
+      console.log('保存按钮')
     }
+  },
+  computed: {
+    ...mapState({
+      healthdatalist: state => state.health.HealthList
+    })
   }
 }
 </script>

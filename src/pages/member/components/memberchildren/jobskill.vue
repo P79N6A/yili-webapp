@@ -1,7 +1,7 @@
 <template>
  <div class="jobskill-top">
     <ul>
-      <li class="job-li" v-for="item of jobList" :key="item.index" >
+      <li class="job-li" v-for="item of jobdataList" :key="item.id" >
         <div class="job-left">
           <p class="job-lefttime">
             <span class="iconfont job-lefticon">&#xe605;</span>
@@ -10,11 +10,12 @@
            <div class="job-menu">
              <p class="job-unit">{{item.unit}}</p>
              <p class="job-office">{{item.office}}</p>
-             <p class="job-witness">{{item.witness}}:{{item.witness_phone}}</p>
+             <p class="job-witness">{{item.witness}}</p>
+             <p class="job-witness">{{item.witness_phone}}</p>
              <textarea name="" class="job-Remarks" placeholder="暂无备注" disabled="true" v-model="item.Remarks"></textarea>
            </div>
         </div>
-        <div class="job-right" @click="To_WriteJob(item.index)">
+        <div class="job-right" @click="To_WriteJob(item.id)">
           <span class="iconfont job-toDetails">&#xe601;</span>
         </div>
       </li>
@@ -36,15 +37,14 @@
         </div>
       </li> -->
     </ul>
-    <p class="job_add" @click="Creat_job">
+    <p class="job_add" @click="To_WriteJob()">
       <span class="iconfont job_addimg">&#xe608;</span>
     </p>
-    <div class="job_footer">
-      <mt-button type="primary" size="large">保存</mt-button>
-    </div>
  </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'MemberSkill',
   data () {
@@ -84,19 +84,19 @@ export default {
     }
   },
   methods: {
-    To_WriteJob (index) {
-      this.$router.push({
-        path: `/jobdata`
-      })
-    },
-    Creat_job () {
+    To_WriteJob (itemid) {
       this.$router.push({
         path: `/jobdata`,
         query: {
-          name: '哒哒哒'
+          name: itemid
         }
       })
     }
+  },
+  computed: {
+    ...mapState({
+      jobdataList: state => state.jobskill.jobdataList
+    })
   }
 }
 </script>

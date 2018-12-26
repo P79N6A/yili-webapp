@@ -1,0 +1,248 @@
+<template>
+<div class="upload-IDCard">
+    <div class="Member-nav">
+        <router-link to="/entry">
+        <div class="Member-back">
+            <span class="iconfont ">&#xe602;</span>
+        </div>
+        </router-link>
+        <div class="Member-collection">
+            <h4 class="Member-msgtitle">{{MemberTitle.title}}</h4>
+        </div>
+        <div class="Member-refer" @click="keepPostdata" >
+            <h4 class="Member-submit">{{MemberTitle.refer}}</h4>
+        </div>
+    </div>
+    <div class="Stuff-Id">
+        <p class="stuff-idht">{{MemberTitle.idtitle}}</p>
+        <div class="upload-img" style="width:100%;text-align: center;">
+            <el-upload
+                action="https://jsonplaceholder.typicode.com/posts/"
+                list-type="picture-card"
+                accept="image/JPEG,image/PNG"
+                :http-request="httpRequest"
+                :show-file-list="true"
+                :auto-upload="true"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload">
+                <i class="el-icon-plus"></i>
+            </el-upload>
+        </div>
+    </div>
+</div>
+</template>
+<script>
+export default {
+  name: 'IDCardPhone',
+  data () {
+    return {
+      MemberTitle: {
+        back: '',
+        title: '身份证上传',
+        refer: '保存',
+        idtitle: '请上传身份证正反面照片，注意反光，保证内容清晰可见  （点击后可进行删除操作）'
+      },
+      dialogImageUrl: '',
+      dialogVisible: true
+    }
+  },
+  methods: {
+    httpRequest (options) {
+      // 获取文件对象
+      let file = options.file
+      // 判断图片类型
+      if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/JPG') {
+        var  isJPG =  true
+      } else {
+        isJPG =  false
+      }
+      // 判断图片大小
+      const isLt2M = file.size / 1024 / 1024 < 5
+      if (!isJPG) {
+        this.$message.error('上传产品图片只能是 JPG/PNG/JPEG 格式!')
+      }
+      // 创建一个HTML5的FileReader对象
+      var reader = new FileReader()
+      // 创建一个img对象
+      var  img = new Image()
+      let filename = options.filename
+      if (file) {
+        reader.readAsDataURL(file)
+      }
+      if (isJPG && isLt2M) {
+        reader.onload = (e) => {
+        let base64Str = reader.result.split(',')[1]
+        img.src = e.target.result
+        // base64地址图片加载完毕后执行
+        img.onload = function () {
+        // 缩放图片需要的canvas（也可以在DOM中直接定义canvas标签，这样就能把压缩完的图片不转base64也能直接显示出来）
+        var canvas = document.createElement('canvas')
+        var context = canvas.getContext('2d')
+        // 图片原始尺寸
+        var originWidth = this.width
+        var originHeight = this.height
+        // 最大尺寸限制，可通过设置宽高来实现图片压缩程度
+        var maxWidth = 300, maxHeight = 300
+        // 目标尺寸
+        var targetWidth = originWidth,
+        targetHeight = originHeight
+        // 图片尺寸超过最大尺寸的限制
+        if(originWidth > maxWidth || originHeight > maxHeight) {
+            if(originWidth / originHeight > maxWidth / maxHeight) {
+            // 更改宽度，按照宽度限定尺寸
+                targetWidth = maxWidth
+                targetHeight = Math.round(maxWidth * (originHeight / originWidth))
+            } else {
+                targetHeight = maxHeight
+                targetWidth = Math.round(maxHeight * (originWidth / originHeight))
+              }
+            }
+            //对图片进行缩放
+            canvas.width = targetWidth
+            canvas.height = targetHeight
+            // 清除画布
+                context.clearRect(0, 0, targetWidth, targetHeight)
+                // 图片压缩
+                context.drawImage(img, 0, 0, targetWidth, targetHeight)
+                /*第一个参数是创建的img对象；第二三个参数是左上角坐标，后面两个是画布区域宽高*/
+                //压缩后的base64文件
+                var newUrl = canvas.toDataURL('image/jpeg', 0.92)
+                // console.log(newUrl)
+                this.dialogImageUrl = newUrl
+                //获取base64图片大小，返回MB数字
+                var str = newUrl.replace('data:image/png;base64,', '')
+                var equalIndex = str.indexOf('=')
+                if(str.indexOf('=')>0) {
+                        str = str.substring(0, equalIndex)
+                }
+                var strLength = str.length
+                var fileLength = parseInt(strLength-(strLength/8)*2)
+                // 由字节转换为MB
+                var size = ""
+                size = (fileLength/(1024 * 1024)).toFixed(2)
+                var sizeStr = size + ""                     //转成字符串
+                var index = sizeStr.indexOf(".")                    //获取小数点处的索引
+                var dou = sizeStr.substr(index + 1, 2)            //获取小数点后两位的值
+                if(dou == "00"){                                //判断后两位是否为00，如果是则删除00                
+                        return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+                }
+               console.log(size)
+              }
+            }
+          }
+        },
+      beforeAvatarUpload(file) {
+					const isLt2M = file.size / 1024 / 1024 < 5
+					
+					if(!isLt2M){
+						this.$message.error("上传产品图片大小不能超过 5MB!")
+					}
+					return isLt2M
+      },
+      handleRemove(file, fileList) {
+       
+      },
+      handlePictureCardPreview(file) {     
+			
+      },
+  	  handleAvatarSuccess(res, file) {//图片上传成功
+
+      },
+      keepPostdata(){  
+				const loadingInstance1 = this.$loading({ body: true,text:"正在上传中",spinner:"el-icon-loading",background:"rgba(0, 0, 0, 0.8)" });
+      	const that=this;					
+				setTimeout(function(){			
+						that.$message({
+							message:"上传成功",
+							type: 'success',
+							center:true
+						});
+						loadingInstance1.close();
+						if(that.$route.query.isSuc){      		
+							that.$route.query.isSuc.push('004');
+							that.$router.push({name:'Entry',params:{isSuc:that.$route.query.isSuc}});
+						}	
+				},2000);
+
+      }
+
+	}
+}
+</script>
+<style lang="stylus" scoped>
+@import '~@/assets/styles/varibles.styl'
+.Member-nav
+  width:100%
+  height:$darkHeight
+  tex-align:center
+  .Member-back
+    box-sizing: border-box
+    float:left
+    width:20%
+    height:$darkHeight
+    line-height:$darkHeight
+    padding-left:.4rem
+    font-size:.3rem
+    color:#333
+  .Member-collection
+    box-sizing: border-box
+    float:left
+    width:60%
+    height:$darkHeight
+    line-height:$darkHeight
+    .Member-msgtitle
+      font-weight:bold
+      font-size:.4rem
+      color:#666
+      text-align:center
+   .Member-refer
+    box-sizing: border-box
+    float:left
+    width:20%
+    height:$darkHeight
+    line-height:$darkHeight
+    .Member-submit
+      font-weight:400
+      font-size:.4rem
+      color:#CC3300
+      text-align:center
+.Stuff-Id
+  box-sizing:box-sizing
+  padding-left:.4rem
+  padding-right:.4rem
+  font-size:14px
+  .stuff-idht
+    line-height:.5rem 
+    padding-bottom:.3rem
+    text-align:center
+    
+</style>
+<style type="text/css">
+		.upload-IDCard .Member-nav{
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			z-index: 999;
+			background-color: #FFFFFF;
+		}
+		.Stuff-Id {
+			position: relative;
+			top: 1.2rem;
+		}
+		
+		.el-upload--picture-card {
+			width: 5rem;
+			height: auto;
+		}
+		
+		.el-upload-list--picture-card .el-upload-list__item {
+			width: 5rem;
+			height: auto;
+		}
+		
+  	.el-icon-zoom-in{
+  		display: none;
+  	}
+</style>

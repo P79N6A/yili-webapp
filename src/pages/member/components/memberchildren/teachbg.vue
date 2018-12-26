@@ -1,7 +1,7 @@
 <template>
  <div class="jobskill-top">
     <ul>
-      <li class="job-li" v-for="item of jobList" :key="item.index" >
+      <li class="job-li" v-for="item of TeachbgdataList" :key="item.index" >
         <div class="job-left">
           <p class="job-lefttime">
             <span class="iconfont job-lefticon">&#xe605;</span>
@@ -77,20 +77,19 @@
              <textarea name="" class="job-Remarks" placeholder="暂无备注" disabled="true" v-model="item.Remarks"></textarea>
            </div>
         </div>
-        <div class="job-right" @click="To_WriteJob(item.index)">
+        <div class="job-right" @click="To_WriteJob(item.id)">
           <span class="iconfont job-toDetails">&#xe601;</span>
         </div>
       </li>
     </ul>
     <p class="job_add" >
-      <span class="iconfont job_addimg" @click="Creat_job">&#xe608;</span>
+      <span class="iconfont job_addimg" @click="To_WriteJob()">&#xe608;</span>
     </p>
-    <div class="job_footer">
-      <mt-button type="primary" size="large">保存</mt-button>
-    </div>
  </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'TeachBg',
   data () {
@@ -125,19 +124,19 @@ export default {
     }
   },
   methods: {
-    To_WriteJob (index) {
-      this.$router.push({
-        path: `/teachdata`
-      })
-    },
-    Creat_job () {
+    To_WriteJob (itemid) {
       this.$router.push({
         path: `/teachdata`,
         query: {
-          name: '哒哒哒'
+          name: itemid
         }
       })
     }
+  },
+  computed: {
+    ...mapState({
+      TeachbgdataList: state => state.Teachbg.TeachbgdataList
+    })
   }
 }
 </script>

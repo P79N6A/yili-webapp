@@ -1,20 +1,26 @@
 <template>
- <div>
+ <div class="Entrymenu-box">
    <ul class="Entrymenu-ul">
-       <li class="Entrymenu-li" v-for="item of EntryList" :key="item.id" >
-         <div class="Entry-left">
-             <div class="Entry-leftbg">
-                 <span class="iconfont entry-book">&#xe62b;</span>
-             </div>
-         </div>
-         <div class="Entry-container">
-            <ul>
-              <li class="Entry-first">{{item.title}}</li>
-              <li class="Entry-Upload">{{item.desc}}</li>
-              <li class="Entry-Upload">{{item.descsec}}</li>
-            </ul>
-          </div>
-           <router-link to="/entry/upload">
+       <li class="Entrymenu-li" v-for="item of EntryList" :key="item.id">
+        <router-link :to="{path:'/upload/components/'+item.page,query:{isSuc:isuploadarr}}">
+           <div class="Entry-left">
+               <div class="Entry-leftbg">
+                   <span class="iconfont entry-book">&#xe62b;</span>
+               </div>
+           </div>
+         </router-link>
+         <router-link :to="{path:'/upload/components/'+item.page,query:{isSuc:isuploadarr}}">
+           <div class="Entry-container">
+              <ul>
+                <li class="Entry-first">{{item.title}}</li>
+                <li v-if="isuploadarr.indexOf(item.id)<0"  class="Entry-Upload">{{item.desc}}</li>
+                <li v-if="isuploadarr.indexOf(item.id)>-1" class="Entry-Uploadsuc">{{item.suc}}</li>
+             	  <li v-if="isuploadarr.indexOf(item.id)<0"  class="Entry-Upload">{{item.descsec}}</li>
+                <li v-if="isuploadarr.indexOf(item.id)>-1" class="Entry-Uploadsuc">{{item.descecsuc}}</li>
+              </ul>
+            </div>
+          </router-link>
+           <router-link :to="{path:'/upload/components/'+item.page,query:{isSuc:isuploadarr}}">
              <div class="Entry-right">
                 <span class="iconfont entry-go">&#xe601;</span>
               </div>
@@ -33,39 +39,71 @@ export default {
           id: '001',
           title: '离职证明',
           desc: '尚未上传',
-          descsec: '请务必完善'
+          suc: '上传成功',
+          descsec: '请务必完善',
+          descecsuc: '请勿重复上传',
+          page: 'quitProve'
         }, {
           id: '002',
           title: '体检报告',
           desc: '尚未上传',
-          descsec: '若有，请上传'
+          suc: '上传成功',
+          descsec: '若有，请上传',
+          descecsuc: '请勿重复上传',
+          page: 'medicalReport'
         }, {
           id: '003',
           title: '学历证书',
           desc: '尚未上传',
-          descsec: '请务必完善'
+          suc: '上传成功',
+          descsec: '请务必完善',
+          descecsuc: '请勿重复上传',
+          page: 'diploma'
         }, {
           id: '004',
           title: '身份证复印件',
           desc: '尚未上传',
-          descsec: '请务必完善'
+          suc: '上传成功',
+          descsec: '请务必完善',
+          descecsuc: '请勿重复上传',
+          page: 'IDCard'
         }, {
           id: '005',
           title: '特殊工种证书',
           desc: '尚未上传',
-          descsec: '若有，请上传'
+          suc: '上传成功',
+          descsec: '若有，请上传',
+          descecsuc: '请勿重复上传',
+          page: 'specialWork'
         }, {
           id: '006',
           title: '个人照片',
           desc: '尚未上传',
-          descsec: '请务必完善'
+          suc: '上传成功',
+          descsec: '请务必完善',
+          descecsuc: '请勿重复上传',
+          page: 'personPhone'
         }, {
           id: '007',
           title: '银行卡复印件',
           desc: '尚未上传',
-          descsec: '请务必完善'
+          suc: '上传成功',
+          descsec: '请务必完善',
+          descecsuc: '请勿重复上传',
+          page: 'bankCard'
         }
-      ]
+      ],
+      isuploadarr: []
+    }
+  },
+  activated () {
+    this.changeStatus()
+  },
+  methods: {
+    changeStatus () {
+      if (this.$route.params.isSuc) {
+        this.isuploadarr = this.$route.params.isSuc
+      }
     }
   }
 }
@@ -114,22 +152,40 @@ export default {
     overflow:hidden
     float:left
     .Entry-first
-      font-size:.4rem
+      font-size:18px
       color:#666666
       height:.45rem
-      line-height:.45rem
+      line-height:.5rem
     .Entry-Upload
-      font-size:.26rem
+      font-size:14px
       color:#CC3300
       height:.35rem
+      line-height:.4rem
+    .Entry-Uploadsuc
+      font-size:.26rem
+      height:.35rem
       line-height:.35rem
+      color:#67c23a
    .Entry-right
-     width:17%
+     width:15%
      float:left
      height:$darkHeight
      line-height:$darkHeight
      text-align:right
      .entry-go
        color: #999;
-       font-size: 0.5rem;
+       font-size: 0.4rem;
+</style>
+<style>
+.el-progress.is-success .el-progress-bar__inner {
+		background: -webkit-linear-gradient(270deg, rgba(255, 153, 0, 1) 0%, rgba(255, 153, 0, 1) 0%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+        background: -moz-linear-gradient(180deg, rgba(255, 153, 0, 1) 0%, rgba(255, 153, 0, 1) 0%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+        background: -o-linear-gradient(180deg, rgba(255, 153, 0, 1) 0%, rgba(255, 153, 0, 1) 0%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+        background: linear-gradient(180deg, rgba(255, 153, 0, 1) 0%, rgba(255, 153, 0, 1) 0%, rgba(228, 228, 228, 1) 100%, rgba(228, 228, 228, 1) 100%);
+}
+ @media screen and (max-width:321px) {
+   .Entrymenu-box .Entrymenu-ul .Entrymenu-li .Entry-container .Entry-first{font-size: 16px;}
+   .Entrymenu-box .Entrymenu-ul .Entrymenu-li .Entry-container .Entry-Upload{font-size: 12px;}
+   .Entrymenu-box .Entrymenu-ul .Entrymenu-li{height: 1.1rem;margin-top: 0;}
+}
 </style>

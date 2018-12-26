@@ -13,7 +13,7 @@
        </div>
        <ul class="job_ul">
          <li class="job_li">
-           <div class="job_left" >
+           <div class="job_left" :class="{ color_error: proof.starttimeActive}">
              发证日期
            </div>
            <div class="job_right"  @click="setDate">
@@ -21,7 +21,7 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: proof.endtimeActive}">
              过期日期
            </div>
            <div class="job_right" @click="setDate2">
@@ -29,24 +29,25 @@
            </div>
          </li>
          <li class="job_li">
-           <div class="job_left">
+           <div class="job_left" :class="{ color_error: proof.unitActive}">
              发证单位
            </div>
            <div class="job_right">
-               <input type="text" :value="proof.unit" placeholder="请在此输入" />
+               <input type="text" v-model="proof.unit" placeholder="请在此输入" />
            </div>
          </li>
        </ul>
        <p class="job_title">备注</p>
-       <textarea class="job_memark" placeholder="请在此处输入" :value="proof.mark"></textarea>
-       <div class="job_keep">
-          <mt-button type="primary" size="normal" class="job_btn">保存</mt-button>
-          <mt-button type="danger" size="normal"  class="job_btn job_delete">删除</mt-button>
+       <textarea class="job_memark" placeholder="请在此处输入" v-model="proof.mark"></textarea>
+       <div class="job_keep"  v-show="isOriginHei">
+          <mt-button type="primary" size="normal" class="job_btn" @click="health_keep">保存</mt-button>
+          <mt-button type="danger" size="normal"  class="job_btn job_delete" @click="health_remove">删除</mt-button>
        </div>
 </div>
 </template>
 
 <script type="text/javascript">
+import { MessageBox } from 'mint-ui'
 
 export default {
   name: 'healthdata',
@@ -58,10 +59,16 @@ export default {
       },
       proof: {
         starttime: '2018-02-10',
+        starttimeActive: false,
         endtime: '2020-10-10',
+        endtimeActive: false,
         unit: '',
+        unitActive: false,
         mark: ''
-      }
+      },
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight,
+      originHeight: document.documentElement.clientHeight
     }
   },
   methods: {
@@ -78,6 +85,114 @@ export default {
         type: 'datePicker',
         onOk: (e) => {
           this.proof.endtime = e
+        }
+      })
+    },
+    health_keep () {
+      let healthSelect = true
+      const proof = this.proof
+      const ID = this.$route.query.name
+      if (proof.starttime > proof.endtime) {
+        proof.starttimeActive = true
+        proof.endtimeActive = true
+        healthSelect = false
+      } else {
+        proof.starttimeActive = false
+        proof.endtimeActive = false
+      }
+      if (proof.unit === '') {
+        proof.unitActive = true
+        healthSelect = false
+      } else {
+        proof.unitActive = false
+      }
+      if (healthSelect) {
+        if (ID === undefined) {
+          let listlength = this.$store.state.health.HealthList.length + 1
+          let addmsg = {
+            id: listlength,
+            starttime: proof.starttime,
+            endtime: proof.endtime,
+            unit: proof.unit,
+            marker: proof.mark
+          }
+          this.$store.commit('HealthAddMsg', addmsg)
+          this.$router.push({
+            path: `/member`
+          })
+        } else {
+          let writemsg = {
+            id: ID,
+            starttime: proof.starttime,
+            endtime: proof.endtime,
+            unit: proof.unit,
+            marker: proof.mark
+          }
+          this.$store.commit('HealthWriteMsg', writemsg)
+          this.$router.push({
+            path: `/member`
+          })
+        }
+        MessageBox('信息正确', '信息保存成功')
+      } else {
+        MessageBox('提交信息有误', '有误信息已经标红,请修改')
+      }
+    },
+    health_remove () {
+      const ID = this.$route.query.name
+      if (ID === undefined) {
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      } else {
+        this.$store.commit('HealthRemoveMsg', ID)
+        this.$router.push({
+          path: `/member`
+        })
+        MessageBox('信息删除', '信息删除成功')
+      }
+    }
+  },
+  mounted () {
+    let self = this
+    window.onresize = function () {
+      return (function () {
+        self.screenHeight = document.documentElement.clientHeight
+      })()
+    }
+  },
+  watch: {
+    screenHeight (val) {
+      if (this.originHeight > val) {
+        this.isOriginHei = false
+      } else {
+        this.isOriginHei = true
+      }
+    }
+  },
+  activated () {
+    const ID = this.$route.query.name
+    if (ID === undefined) {
+      this.proof.starttime = '2008-01-01'
+      this.proof.starttimeActive = false
+      this.proof.endtime = '2020-01-01'
+      this.proof.endtimeActive = false
+      this.proof.unit = ''
+      this.proof.unitActive = false
+      this.proof.mark = ''
+    } else {
+      let data = this
+      let list = this.$store.state.health.HealthList
+      list.forEach(function (item) {
+        if (item.id === ID) {
+          data.proof.starttime = item.starttime
+          data.proof.starttimeActive = false
+          data.proof.endtime = item.endtime
+          data.proof.endtimeActive = false
+          data.proof.unit = item.unit
+          data.proof.unitActive = false
+          data.proof.mark = item.marker
         }
       })
     }

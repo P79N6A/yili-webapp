@@ -1,31 +1,21 @@
 <template>
  <div class="staff-menu">
    <ul class="staff-ul">
-     <li class="staff-li">
+     <li class="staff-li" @click="ToMember">
         <div class="staff-left">
           <div class="staff-imgcontent">
            <span class="iconfont staff-label">&#xe625;</span>
           </div>
         </div>
         <div class="staff-title">员工信息采集</div>
-        <router-link to="/member">
-          <div class="staff-right">
-            <span class="iconfont staff-collection">&#xe601;</span>
-          </div>
-        </router-link>
      </li>
-     <li class="staff-li">
+     <li class="staff-li" @click="ToEntry">
         <div class="staff-left">
           <div class="staff-imgcontent">
            <span class="iconfont staff-label">&#xe604;</span>
           </div>
         </div>
         <div class="staff-title">入职材料补充</div>
-        <router-link to="/entry">
-          <div class="staff-right">
-            <span class="iconfont staff-collection">&#xe601;</span>
-          </div>
-        </router-link>
      </li>
    </ul>
  </div>
@@ -36,6 +26,18 @@ export default {
   data () {
     return {
       list: ''
+    }
+  },
+  methods: {
+    ToMember () {
+      this.$router.push({
+        path: `/member`
+      })
+    },
+    ToEntry () {
+      this.$router.push({
+        path: `/entry`
+      })
     }
   }
 }
